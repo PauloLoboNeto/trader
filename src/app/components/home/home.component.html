@@ -1,0 +1,58 @@
+<div class="col-12">
+    <div class="row text-center" style="margin-top: 8%; margin-bottom: 5%;">
+        <div class="col-12">
+            <div class="col-5" style="margin-left: auto; margin-right: auto;">
+                <i class="fa fa-search icon-left" aria-hidden="true"></i>
+                <i class="fa fa-times-circle icon-right" aria-hidden="true"></i>
+                <input class="input-style" maxlength="43" type="text">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3" *ngFor="let l of loop">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6" style="display: flex; flex-direction: column;">
+                            <label style="font-size: 14px; margin-bottom: 0px;"><strong>MGLU3</strong></label>
+                            <label style="font-size: 8px;">MAGAZ LUIZA ON NM</label>
+                        </div>
+                        <div class="col-6" style="text-align: right; bottom: 18px;padding-right: 4px;">
+                            <i class="fa fa-times mouse-pointer" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6" style="display: flex; flex-direction: row;">
+                            <div class="col-2" style="padding-left: 0px;">
+                                <label style="font-size: 10px;">R$</label>
+                            </div>
+                            <div class="col-10" style="padding-left: 0px;">
+                                <label style="font-size: 30px;">229,90</label>
+                            </div>
+                        </div>
+                        <div class="col-6" style="padding-top: 10px;">
+                            <label style="font-size: 18px; color: green;">+1,29%</label>
+                        </div>
+                    </div>
+                    <div class="row space-t">
+                        <div class="col-8" style="display: flex; flex-direction: row; padding-left: 0px;">
+                            <div class="col-6" style="display: flex; flex-direction: column;">
+                                <label style="font-size: 11px; margin-bottom: 0px;">Mín.</label>
+                                <label style="font-size: 11px;">48,80</label>
+                            </div>
+                            <div class="col-6" style="display: flex; flex-direction: column; padding-left: 0px;">
+                                <label style="font-size: 11px; margin-bottom: 0px;">Máx.</label>
+                                <label style="font-size: 11px;">49,49</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label style="font-size: 10px;">27/03/2020 17:31:57</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <google-chart [type]="myType" [data]="myData" ></google-chart> -->
