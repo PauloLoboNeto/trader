@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
     }
 
     public logar(user: string, password: string) {
-        // tslint:disable-next-line: triple-equals
         if (user == this.user && password == this.password) {
             this.router.navigate(['/home-component']);
         }

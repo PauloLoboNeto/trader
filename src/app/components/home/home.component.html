@@ -1,57 +1,80 @@
 <div class="col-12">
     <div class="row text-center" style="margin-top: 8%; margin-bottom: 5%;">
         <div class="col-12">
-            <div class="col-5" style="margin-left: auto; margin-right: auto;">
+            <div class="col-4" style="margin-left: auto; margin-right: auto;">
                 <i class="fa fa-search icon-left" aria-hidden="true"></i>
-                <i class="fa fa-times-circle icon-right" aria-hidden="true"></i>
-                <input class="input-style" maxlength="43" type="text">
+                <i class="fa fa-check icon-right-one" aria-hidden="true" *ngIf="exibirIconOne"
+                    (click)="adicionarCard()"></i>
+                <i class="{{currentIconInput}} icon-right-two" aria-hidden="true"
+                    (mouseenter)="currentIconInput = 'fa fa-times-circle'"
+                    (mouseleave)="currentIconInput = 'fa fa-times-circle-o'" (click)="apagarPesquisa()"></i>
+                <input class="input-style" #inputSearch (keyup)="pesquisar()" (click)="atribuirCor()"
+                    (blur)="removerCor()" maxlength="30" type="text">
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-3" *ngFor="let l of loop">
-            <div class="card">
+    <div *ngIf="cards.length > 0" class="row example-list" #card cdkDropList cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="drop($event)">
+        <div class="col-3 example-box" cdkDrag *ngFor="let l of cards; let i = index" @flyInOut>
+            <div class="card space-b">
                 <div class="card-body">
+                    <div class="example-handle" cdkDragHandle>
+                        <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z">
+                            </path>
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                        </svg>
+                    </div>
+                    <div class="x">
+                        <i class="{{currentIconCard}} mouse-pointer" aria-hidden="true"
+                            (mouseenter)="alterarIconCard(i, 'mouseenter')"
+                            (mouseleave)="alterarIconCard(i, 'mouseleave')" (click)="excluirCard(i)"></i>
+                    </div>
                     <div class="row">
-                        <div class="col-6" style="display: flex; flex-direction: column;">
-                            <label style="font-size: 14px; margin-bottom: 0px;"><strong>MGLU3</strong></label>
-                            <label style="font-size: 8px;">MAGAZ LUIZA ON NM</label>
-                        </div>
-                        <div class="col-6" style="text-align: right; bottom: 18px;padding-right: 4px;">
-                            <i class="fa fa-times mouse-pointer" aria-hidden="true"></i>
+                        <div class="col-8" style="display: flex; flex-direction: column; padding-left: 10px;">
+                            <label
+                                style="font-size: 14px; margin-bottom: 0px;"><strong>{{l.getAbreviationName()}}</strong></label>
+                            <label style="font-size: 8px;">{{l.getName()}}</label>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6" style="display: flex; flex-direction: row;">
-                            <div class="col-2" style="padding-left: 0px;">
+                        <div class="col-6" style="display: flex; flex-direction: row; padding-left: 10px;">
+                            <div class="col-1" style="padding-left: 0px;">
                                 <label style="font-size: 10px;">R$</label>
                             </div>
                             <div class="col-10" style="padding-left: 0px;">
-                                <label style="font-size: 30px;">229,90</label>
+                                <label style="font-size: 25px;">{{l.getValue()}}</label>
                             </div>
                         </div>
-                        <div class="col-6" style="padding-top: 10px;">
-                            <label style="font-size: 18px; color: green;">+1,29%</label>
+                        <div class="col-6 text-right" style="padding-top: 10px; padding-right: 10px;">
+                            <label style="font-size: 16px; color: green;">{{l.getPorcentage()}}</label>
                         </div>
                     </div>
                     <div class="row space-t">
-                        <div class="col-8" style="display: flex; flex-direction: row; padding-left: 0px;">
-                            <div class="col-6" style="display: flex; flex-direction: column;">
+                        <div class="col-8" style="display: flex; flex-direction: row; padding-left: 10px;">
+                            <div class="col-6 text-left"
+                                style="display: flex; flex-direction: column; padding-left: 0px;">
                                 <label style="font-size: 11px; margin-bottom: 0px;">Mín.</label>
-                                <label style="font-size: 11px;">48,80</label>
+                                <label style="font-size: 11px;">{{l.getMin()}}</label>
                             </div>
                             <div class="col-6" style="display: flex; flex-direction: column; padding-left: 0px;">
                                 <label style="font-size: 11px; margin-bottom: 0px;">Máx.</label>
-                                <label style="font-size: 11px;">49,49</label>
+                                <label style="font-size: 11px;">{{l.getMax()}}9</label>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <label style="font-size: 10px;">27/03/2020 17:31:57</label>
+                        <div class="col-4 text-right" style="padding-right: 10px;">
+                            <label style="font-size: 10px;">{{l.getDate()}} {{l.getDateTime()}}</label>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div *ngIf="cards.length == 0" class="text-center">
+        <div class="col-12" style="padding-left: 0px; padding-top: 110px;">
+            <span style="font-size: 24px; color: white;">Não há dados pra exibir</span>
         </div>
     </div>
 </div>
