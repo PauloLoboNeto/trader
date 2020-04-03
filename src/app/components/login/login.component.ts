@@ -1,4 +1,4 @@
-import { FormularioLoginModel } from './../../model/login/formularioLogin.model';
+import { FormularioLoginModel } from '../../models/login/formularioLogin.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';

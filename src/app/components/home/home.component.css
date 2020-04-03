@@ -68,7 +68,7 @@
     position: absolute;
     top: 4px;
     padding-left: 6px;
-    z-index: 2;
+    z-index: 0;
     display: block;
     width: 34px;
     height: 34px;
@@ -80,7 +80,7 @@
     position: absolute;
     top: 4px;
     right: 41px;
-    z-index: 2;
+    z-index: 0;
     display: block;
     width: 34px;
     color: green;
@@ -94,7 +94,7 @@
     position: absolute;
     top: 4px;
     right: 41px;
-    z-index: 2;
+    z-index: 0;
     display: block;
     width: 34px;
     color: red;
@@ -108,7 +108,7 @@
     position: absolute;
     top: 4px;
     right: 16px;
-    z-index: 2;
+    z-index: 0;
     display: block;
     width: 34px;
     height: 34px;
@@ -121,7 +121,7 @@
     position: absolute;
     top: 4px;
     right: 16px;
-    z-index: 2;
+    z-index: 0;
     display: block;
     width: 34px;
     height: 34px;

@@ -1,5 +1,5 @@
 import { AlertService } from './../../shared/services/alert/alert.service';
-import { CardModel } from './../../model/login/card.model';
+import { CardModel } from '../../models/login/card.model';
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { AlertType } from './../../shared/services/alert/alert.enum';
 import {
@@ -10,6 +10,7 @@ import {
     transition
 } from '@angular/animations';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
     selector: 'app-home-component',
@@ -31,16 +32,11 @@ export class HomeComponent implements OnInit {
 
     cards: CardModel[] = new Array<CardModel>();
     cardPesquisa = new Array<CardModel>();
-    myType = 'LineChart';
-    myData = [
-        ['London', 8136000],
-        ['New York', 8538000],
-        ['Paris', 2244000],
-        ['Berlin', 3470000],
-        ['Kairo', 19500000]
-    ];
+  
     @ViewChild('inputSearch') search: ElementRef;
     @ViewChild('card') card: ElementRef;
+    @ViewChild(ModalComponent) modal: ModalComponent;
+
     currentIconInput: string;
     exibirIconOne = false;
     currentIconCard: string;
@@ -177,7 +173,8 @@ export class HomeComponent implements OnInit {
     }
 
     excluirCard(index: number) {
-        this.cards.splice(index, 1);
+        this.modal.openModal();
+        // this.cards.splice(index, 1);
     }
 
     definirBoxShadow(valor: string) {
