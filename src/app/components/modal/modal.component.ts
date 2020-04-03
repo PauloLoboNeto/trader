@@ -13,10 +13,6 @@ export class ModalComponent {
         this.modal.nativeElement.style.display = 'block';
     }
 
-    closeModal() {
-        this.modal.nativeElement.style.display = 'none';
-    }
-
     // // When the user clicks anywhere outside of the modal, close it
     // window.onclick = function(event) {
     //   if (event.target == modal) {
