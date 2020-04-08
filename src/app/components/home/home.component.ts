@@ -1,3 +1,5 @@
+import { AlphaService } from './../../shared/services/alpha.service';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { AlertService } from './../../shared/services/alert/alert.service';
 import { CardModel } from '../../models/login/card.model';
 import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
@@ -11,6 +13,8 @@ import {
 } from '@angular/animations';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ModalComponent } from '../modal/modal.component';
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-home-component',
@@ -32,7 +36,7 @@ export class HomeComponent implements OnInit {
 
     cards: CardModel[] = new Array<CardModel>();
     cardPesquisa = new Array<CardModel>();
-  
+
     @ViewChild('inputSearch') search: ElementRef;
     @ViewChild('card') card: ElementRef;
     @ViewChild(ModalComponent) modal: ModalComponent;
@@ -41,7 +45,11 @@ export class HomeComponent implements OnInit {
     exibirIconOne = false;
     currentIconCard: string;
 
-    constructor(private alertService: AlertService, private renderer: Renderer2) {
+    searchForm: FormGroup;
+    searchControl: FormControl;
+
+    constructor(private alertService: AlertService, private renderer: Renderer2,
+        private fb: FormBuilder, private alphaService: AlphaService) {
         const card1 = new CardModel();
         card1.setAbreviationName('MGLU1');
         card1.setName('MAGAZ1 LUIZA ON NM');
@@ -108,6 +116,22 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
         this.currentIconInput = 'fa fa-times-circle-o';
         this.currentIconCard = 'fa fa-times';
+
+        this.searchControl = this.fb.control('')
+
+        this.searchForm = this.fb.group({
+            searchControl: this.searchControl
+        })
+
+        this.searchControl.valueChanges
+            .pipe(
+                debounceTime(500),
+                distinctUntilChanged(),
+                switchMap(
+                    (searchTerm: any) => this.alphaService.getSearch(searchTerm))
+            ).subscribe(resp => console.log(resp));
+
+        // this.restaurantsService.restaurants().subscribe(restaurants => this.restaurants = restaurants);
     }
 
     pesquisar() {
@@ -173,8 +197,11 @@ export class HomeComponent implements OnInit {
     }
 
     excluirCard(index: number) {
+        this.cards.splice(index, 1);
+    }
+
+    openModal() {
         this.modal.openModal();
-        // this.cards.splice(index, 1);
     }
 
     definirBoxShadow(valor: string) {

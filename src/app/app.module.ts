@@ -1,3 +1,5 @@
+import { AlphaService } from './shared/services/alpha.service';
+import { FileService } from './shared/services/file.service';
 import { GraphicComponent } from './components/graphic/graphic.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { LoginComponent } from './components/login/login.component';
@@ -13,6 +15,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
 import { AlertService } from './shared/services/alert/alert.service';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ModalBodyComponent } from './components/modal/modal-body/modal-body.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,10 +32,11 @@ import { ModalBodyComponent } from './components/modal/modal-body/modal-body.com
     AppRoutingModule,
     DragDropModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     GoogleChartsModule.forRoot()
   ],
-  providers: [AlertService],
+  providers: [AlertService, FileService, AlphaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
