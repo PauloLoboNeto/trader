@@ -13,7 +13,7 @@ import {
 } from '@angular/animations';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ModalComponent } from '../modal/modal.component';
-import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -29,6 +29,21 @@ import { Observable } from 'rxjs';
             transition('* => void', [
                 animate(300, style({ transform: 'translateY(-25%)' }))
             ])
+        ]),
+        trigger('openCloseTrigger', [
+            state('open', style({
+                display: '',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                borderRadius: '0px 0px 10px 10px',
+                background: 'white',
+                borderBottom: '0.021em solid',
+                borderLeft: '0.021em solid',
+                borderRight: '0.021em solid'
+            })),
+            state('closed', style({
+                display: 'none'
+            }))
         ])
     ]
 })
@@ -37,18 +52,21 @@ export class HomeComponent implements OnInit {
     cards: CardModel[] = new Array<CardModel>();
     cardPesquisa = new Array<CardModel>();
 
-    @ViewChild('inputSearch') search: ElementRef;
+    @ViewChild('inputSearch') inputSearch: ElementRef;
     @ViewChild('card') card: ElementRef;
     @ViewChild(ModalComponent) modal: ModalComponent;
 
+    pesquisa = [];
     currentIconInput: string;
     exibirIconOne = false;
     currentIconCard: string;
-
     searchForm: FormGroup;
     searchControl: FormControl;
+    openCloseTrigger = false;
 
-    constructor(private alertService: AlertService, private renderer: Renderer2,
+    constructor(
+        private alertService: AlertService,
+        private renderer: Renderer2,
         private fb: FormBuilder, private alphaService: AlphaService) {
         const card1 = new CardModel();
         card1.setAbreviationName('MGLU1');
@@ -114,45 +132,52 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.pesquisa.push('1', '2', '3');
         this.currentIconInput = 'fa fa-times-circle-o';
         this.currentIconCard = 'fa fa-times';
 
-        this.searchControl = this.fb.control('')
+        this.searchControl = this.fb.control('');
 
         this.searchForm = this.fb.group({
             searchControl: this.searchControl
-        })
+        });
 
         this.searchControl.valueChanges
-            .pipe(
-                debounceTime(500),
-                distinctUntilChanged(),
-                switchMap(
-                    (searchTerm: any) => this.alphaService.getSearch(searchTerm))
-            ).subscribe(resp => console.log(resp));
+            .subscribe(
+                (searchTerm: any) => {
+                    if (this.inputSearch) {
+                        if (this.inputSearch.nativeElement.value.length > 3) {
+                            this.exibirIconOne = true;
+                        } else {
+                            this.exibirIconOne = false;
+                        }
+                    }
+                    // this.alphaService.getSearch(searchTerm);
+                    if (this.pesquisa.length == 0 || this.inputSearch.nativeElement.value.length == 0) {
+                        this.inputSearch.nativeElement.style['border-radius'] = '50px';
+                        this.inputSearch.nativeElement.style['border-bottom'] = '';
+                        this.openCloseTrigger = false;
+                    } else {
+                        this.inputSearch.nativeElement.style['border-radius'] = '20px 20px 0px 0px';
+                        this.inputSearch.nativeElement.style['border-bottom'] = '1px solid darkgrey';
+                        this.openCloseTrigger = true;
+                    }
+                });
+        // ).subscribe(resp => console.log(resp));
 
         // this.restaurantsService.restaurants().subscribe(restaurants => this.restaurants = restaurants);
     }
 
-    pesquisar() {
-        if (this.search) {
-            if (this.search.nativeElement.value.length > 3) {
-                this.exibirIconOne = true;
-            } else {
-                this.exibirIconOne = false;
-            }
-        }
-    }
-
     apagarPesquisa() {
-        this.search.nativeElement.value = '';
+        this.inputSearch.nativeElement.value = '';
         this.exibirIconOne = false;
+        this.searchForm.get('searchControl').updateValueAndValidity();
     }
 
     adicionarCard() {
         const retornoPesquisa = this.cardPesquisa.filter((card: CardModel) => {
-            if (card.getAbreviationName().toUpperCase() === this.search.nativeElement.value.toUpperCase()
-                || card.getName().toUpperCase() === this.search.nativeElement.value.toUpperCase()) {
+            if (card.getAbreviationName().toUpperCase() === this.inputSearch.nativeElement.value.toUpperCase()
+                || card.getName().toUpperCase() === this.inputSearch.nativeElement.value.toUpperCase()) {
                 return card;
             }
         });
@@ -175,7 +200,6 @@ export class HomeComponent implements OnInit {
 
     alterarIconCard(index: string, event: string) {
         if (event == 'mouseenter') {
-            // this.renderer.removeClass(this.card.nativeElement.'fa fa-times');
             this.renderer.removeClass(this.card.nativeElement.children[index]
                 .children[0].children[0].children[1].children[0], 'fa-times');
             this.renderer.addClass(this.card.nativeElement.children[index]
@@ -205,7 +229,7 @@ export class HomeComponent implements OnInit {
     }
 
     definirBoxShadow(valor: string) {
-        this.search.nativeElement.style['box-shadow'] = valor;
+        this.inputSearch.nativeElement.style['box-shadow'] = valor;
     }
 
     drop(event: CdkDragDrop<string[]>) {
