@@ -32,6 +32,10 @@ import { Observable } from 'rxjs';
         ]),
         trigger('openCloseTrigger', [
             state('open', style({
+                paddingTop: '8px',
+                paddingBottom: '10px',
+                paddingLeft: '0px',
+                paddingRight: '0px',
                 display: '',
                 marginLeft: 'auto',
                 marginRight: 'auto',
@@ -56,9 +60,9 @@ export class HomeComponent implements OnInit {
     @ViewChild('card') card: ElementRef;
     @ViewChild(ModalComponent) modal: ModalComponent;
 
-    pesquisa = [];
+    resultsSearch = [];
     currentIconInput: string;
-    exibirIconOne = false;
+    exibirIconCheck = false;
     currentIconCard: string;
     searchForm: FormGroup;
     searchControl: FormControl;
@@ -132,7 +136,7 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.pesquisa.push('1', '2', '3');
+        // this.resultsSearch.push('1', '2', '3');
         this.currentIconInput = 'fa fa-times-circle-o';
         this.currentIconCard = 'fa fa-times';
 
@@ -143,34 +147,55 @@ export class HomeComponent implements OnInit {
         });
 
         this.searchControl.valueChanges
-            .subscribe(
-                (searchTerm: any) => {
-                    if (this.inputSearch) {
-                        if (this.inputSearch.nativeElement.value.length > 3) {
-                            this.exibirIconOne = true;
-                        } else {
-                            this.exibirIconOne = false;
-                        }
-                    }
-                    // this.alphaService.getSearch(searchTerm);
-                    if (this.pesquisa.length == 0 || this.inputSearch.nativeElement.value.length == 0) {
+            .pipe(
+                debounceTime(80),
+                distinctUntilChanged(),
+                switchMap((searchTerm: any) => this.alphaService.getSearch(searchTerm)))
+            .subscribe((res: any) => {
+                if (res['bestMatches']) {
+                    this.exibirIconCheck = this.showIconCheck();
+                    if (res['bestMatches'].length == 0 || this.inputSearch.nativeElement.value.length == 0) {
                         this.inputSearch.nativeElement.style['border-radius'] = '50px';
                         this.inputSearch.nativeElement.style['border-bottom'] = '';
                         this.openCloseTrigger = false;
                     } else {
-                        this.inputSearch.nativeElement.style['border-radius'] = '20px 20px 0px 0px';
-                        this.inputSearch.nativeElement.style['border-bottom'] = '1px solid darkgrey';
-                        this.openCloseTrigger = true;
+                        this.resultsSearch = res['bestMatches'].filter(value => {
+                            if (value['2. name']
+                                .toLowerCase()
+                                .replace(/ /g, '')
+                                .includes(this.inputSearch.nativeElement.value.toLowerCase().replace(/ /g, ''))
+                                || value['1. symbol']
+                                    .toLowerCase()
+                                    .replace(/ /g, '')
+                                    .includes(this.inputSearch.nativeElement.value.toLowerCase().replace(/ /g, ''))) return value;
+                        });
+                        if (this.resultsSearch.length > 0) {
+                            this.inputSearch.nativeElement.style['border-radius'] = '20px 20px 0px 0px';
+                            this.inputSearch.nativeElement.style['border-bottom'] = '1px solid darkgrey';
+                            this.openCloseTrigger = true;
+                        } else {
+                            this.inputSearch.nativeElement.style['border-radius'] = '50px';
+                            this.inputSearch.nativeElement.style['border-bottom'] = '';
+                            this.openCloseTrigger = false;
+                        }
                     }
-                });
-        // ).subscribe(resp => console.log(resp));
+                } else {
+                    this.resultsSearch = [];
+                }
+            });
+    }
 
-        // this.restaurantsService.restaurants().subscribe(restaurants => this.restaurants = restaurants);
+    showIconCheck() {
+        if (this.inputSearch.nativeElement.value.length > 0) return true;
+        else return false;
     }
 
     apagarPesquisa() {
         this.inputSearch.nativeElement.value = '';
-        this.exibirIconOne = false;
+        this.exibirIconCheck = false;
+        this.inputSearch.nativeElement.style['border-radius'] = '50px';
+        this.inputSearch.nativeElement.style['border-bottom'] = '';
+        this.openCloseTrigger = false;
         this.searchForm.get('searchControl').updateValueAndValidity();
     }
 

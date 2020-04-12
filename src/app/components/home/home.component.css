@@ -77,6 +77,19 @@
     color: #acacac;
 }
 
+.ul-search {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+}
+
+.ul-search:hover {
+    background: rgb(230, 229, 229);
+}
+
 .icon-check {
     position: absolute;
     top: 4px;

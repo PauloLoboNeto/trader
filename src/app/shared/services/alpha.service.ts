@@ -13,7 +13,7 @@ export class AlphaService {
         return this.fileService.getUrl()
             .pipe(
                 switchMap(res => {
-                    return this.http.get(res['alphaadvantagesearch'] + search);
+                    return this.fileService.getResults();
                 })
             );
     }
