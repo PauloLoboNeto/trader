@@ -6,10 +6,10 @@
                     <i class="fa fa-search icon-search" aria-hidden="true"></i>
                     <i class="fa fa-check icon-check" aria-hidden="true" *ngIf="exibirIconCheck" (click)="adicionarCard()"></i>
                     <i class="{{currentIconInput}} icon-x" aria-hidden="true" (mouseenter)="currentIconInput = 'fa fa-times-circle'" (mouseleave)="currentIconInput = 'fa fa-times-circle-o'" (click)="apagarPesquisa()"></i>
-                    <input formControlName="searchControl" class="input-style" #inputSearch (click)="atribuirCor()" (blur)="removerCor()" maxlength="30" type="text">
-                    <div [@openCloseTrigger]="openCloseTrigger ? 'open' : 'closed'" class="col-12" style="display: none;">
-                        <ng-container *ngIf="openCloseTrigger">
-                            <ul class="text-left ul-search" *ngFor="let p of resultsSearch | slice:0:3; let i = index">
+                    <input formControlName="searchControl" (keyup)="handleKeyUp($event)" id="searchControl" class="input-style" #inputSearch (click)="atribuirCor()" (blur)="removerCor()" maxlength="30" type="text" autocomplete="off">
+                    <div [@openCloseTrigger]="openCloseTrigger ? 'open' : 'closed'" class="col-12" style="display: none;" *ngIf="openCloseTrigger">
+                        <ng-container *ngFor="let p of resultsSearch | slice:0:3; let i = index">
+                            <ul class="text-left ul-search" #ulSearch>
                                 <i class="fa fa-search" aria-hidden="true" style="margin-right: 10px; color: #acacac"></i>
                                 <span>{{p['2. name']}} - {{p['1. symbol']}}</span>
                             </ul>

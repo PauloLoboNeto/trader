@@ -2,7 +2,7 @@ import { AlphaService } from './../../shared/services/alpha.service';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { AlertService } from './../../shared/services/alert/alert.service';
 import { CardModel } from '../../models/login/card.model';
-import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2, HostListener, ViewChildren, QueryList } from '@angular/core';
 import { AlertType } from './../../shared/services/alert/alert.enum';
 import {
     trigger,
@@ -15,6 +15,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ModalComponent } from '../modal/modal.component';
 import { debounceTime, distinctUntilChanged, switchMap, catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { ListKeyManager } from '@angular/cdk/a11y';
 
 @Component({
     selector: 'app-home-component',
@@ -42,8 +43,6 @@ import { Observable } from 'rxjs';
                 borderRadius: '0px 0px 10px 10px',
                 background: 'white',
                 borderBottom: '0.021em solid',
-                borderLeft: '0.021em solid',
-                borderRight: '0.021em solid'
             })),
             state('closed', style({
                 display: 'none'
@@ -53,12 +52,12 @@ import { Observable } from 'rxjs';
 })
 export class HomeComponent implements OnInit {
 
-    cards: CardModel[] = new Array<CardModel>();
-    cardPesquisa = new Array<CardModel>();
+
 
     @ViewChild('inputSearch') inputSearch: ElementRef;
     @ViewChild('card') card: ElementRef;
     @ViewChild(ModalComponent) modal: ModalComponent;
+    @ViewChildren('ulSearch') ulSearch: QueryList<any>;
 
     resultsSearch = [];
     currentIconInput: string;
@@ -67,6 +66,10 @@ export class HomeComponent implements OnInit {
     searchForm: FormGroup;
     searchControl: FormControl;
     openCloseTrigger = false;
+    cards: CardModel[] = new Array<CardModel>();
+    cardPesquisa = new Array<CardModel>();
+    keyboardEventsManager: ListKeyManager<any>;
+    isActive: boolean;
 
     constructor(
         private alertService: AlertService,
@@ -136,12 +139,10 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        // this.resultsSearch.push('1', '2', '3');
+        this.isActive = false;
         this.currentIconInput = 'fa fa-times-circle-o';
         this.currentIconCard = 'fa fa-times';
-
         this.searchControl = this.fb.control('');
-
         this.searchForm = this.fb.group({
             searchControl: this.searchControl
         });
@@ -162,12 +163,12 @@ export class HomeComponent implements OnInit {
                         this.resultsSearch = res['bestMatches'].filter(value => {
                             if (value['2. name']
                                 .toLowerCase()
-                                .replace(/ /g, '')
-                                .includes(this.inputSearch.nativeElement.value.toLowerCase().replace(/ /g, ''))
+                                .replace(/\s+/g, ' ')
+                                .includes(this.inputSearch.nativeElement.value.toLowerCase().replace(/\s+/g, ' '))
                                 || value['1. symbol']
                                     .toLowerCase()
-                                    .replace(/ /g, '')
-                                    .includes(this.inputSearch.nativeElement.value.toLowerCase().replace(/ /g, ''))) return value;
+                                    .replace(/\s+/g, ' ')
+                                    .includes(this.inputSearch.nativeElement.value.toLowerCase().replace(/\s+/g, ' '))) return value;
                         });
                         if (this.resultsSearch.length > 0) {
                             this.inputSearch.nativeElement.style['border-radius'] = '20px 20px 0px 0px';
@@ -179,10 +180,40 @@ export class HomeComponent implements OnInit {
                             this.openCloseTrigger = false;
                         }
                     }
+                    this.keyboardEventsManager = new ListKeyManager<any>(this.ulSearch);
+                    this.initKeyManagerHandlers();
                 } else {
                     this.resultsSearch = [];
                 }
             });
+    }
+
+    initKeyManagerHandlers() {
+        this.keyboardEventsManager
+            .change
+            .subscribe((activeIndex) => {
+                this.ulSearch.map((item: ElementRef, index) => {
+                    if (activeIndex === index) {
+                        item.nativeElement.style['background'] = 'rgb(230, 229, 229)';
+                    } else if (activeIndex != index) {
+                        item.nativeElement.style['background'] = '';
+                    }
+                    return item;
+                });
+            });
+    }
+
+    handleKeyUp(event: KeyboardEvent) {
+        event.stopImmediatePropagation();
+        if (this.keyboardEventsManager) {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                this.keyboardEventsManager.onKeydown(event);
+                return false;
+            } else if (event.key.toUpperCase() === 'ENTER') {
+                this.searchForm.get('searchControl').patchValue(this.keyboardEventsManager.activeItem.nativeElement.textContent);
+                return false;
+            }
+        }
     }
 
     showIconCheck() {
@@ -243,6 +274,7 @@ export class HomeComponent implements OnInit {
 
     removerCor() {
         this.definirBoxShadow('none');
+        //  this.apagarPesquisa();
     }
 
     excluirCard(index: number) {
