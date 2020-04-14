@@ -1,7 +1,7 @@
+import { Cards, Card } from './../../models/login/card.model';
 import { AlphaService } from './../../shared/services/alpha.service';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { AlertService } from './../../shared/services/alert/alert.service';
-import { CardModel } from '../../models/login/card.model';
 import { Component, OnInit, ElementRef, ViewChild, Renderer2, HostListener, ViewChildren, QueryList } from '@angular/core';
 import { AlertType } from './../../shared/services/alert/alert.enum';
 import {
@@ -66,76 +66,14 @@ export class HomeComponent implements OnInit {
     searchForm: FormGroup;
     searchControl: FormControl;
     openCloseTrigger = false;
-    cards: CardModel[] = new Array<CardModel>();
-    cardPesquisa = new Array<CardModel>();
     keyboardEventsManager: ListKeyManager<any>;
     isActive: boolean;
+    cardsAdicionado: Card[] = new Array<Card>();
 
     constructor(
         private alertService: AlertService,
         private renderer: Renderer2,
         private fb: FormBuilder, private alphaService: AlphaService) {
-        const card1 = new CardModel();
-        card1.setAbreviationName('MGLU1');
-        card1.setName('MAGAZ1 LUIZA ON NM');
-        card1.setValue('129,99');
-        card1.setPorcentage('+1,29%');
-        card1.setMin('48,80');
-        card1.setMax('59,90');
-        card1.setDate('27/03/2020');
-        card1.setDateTime('17:31:57');
-
-        const card2 = new CardModel();
-        card2.setAbreviationName('MGLU2');
-        card2.setName('MAGAZ4 LUIZA ON NM');
-        card2.setValue('88.129,99');
-        card2.setPorcentage('+19,29%');
-        card2.setMin('48,80');
-        card2.setMax('59,90');
-        card2.setDate('27/03/2020');
-        card2.setDateTime('17:31:57');
-        const card3 = new CardModel();
-        card3.setAbreviationName('MGLU3');
-        card3.setName('MAGAZ4 LUIZA ON NM');
-        card3.setValue('88.129,99');
-        card3.setPorcentage('+19,29%');
-        card3.setMin('48,80');
-        card3.setMax('59,90');
-        card3.setDate('27/03/2020');
-        card3.setDateTime('17:31:57');
-
-        const card4 = new CardModel();
-        card4.setAbreviationName('MGLU4');
-        card4.setName('MAGAZ4 LUIZA ON NM');
-        card4.setValue('88.129,99');
-        card4.setPorcentage('+19,29%');
-        card4.setMin('48,80');
-        card4.setMax('59,90');
-        card4.setDate('27/03/2020');
-        card4.setDateTime('17:31:57');
-        this.cards.push(card1, card2, card3, card4);
-
-        const card5 = new CardModel();
-        card5.setAbreviationName('MGLU5');
-        card5.setName('MAGAZ5 LUIZA ON NM');
-        card5.setValue('129,99');
-        card5.setPorcentage('+1,29%');
-        card5.setMin('48,80');
-        card5.setMax('59,90');
-        card5.setDate('27/03/2020');
-        card5.setDateTime('17:31:57');
-
-        const card6 = new CardModel();
-        card6.setAbreviationName('MGLU6');
-        card6.setName('MAGAZ6 LUIZA ON NM');
-        card6.setValue('129,99');
-        card6.setPorcentage('+166,29%');
-        card6.setMin('48,80');
-        card6.setMax('59,90');
-        card6.setDate('27/03/2020');
-        card6.setDateTime('17:31:57');
-
-        this.cardPesquisa.push(card5, card6);
     }
 
     ngOnInit() {
@@ -210,7 +148,9 @@ export class HomeComponent implements OnInit {
                 this.keyboardEventsManager.onKeydown(event);
                 return false;
             } else if (event.key.toUpperCase() === 'ENTER') {
-                this.searchForm.get('searchControl').patchValue(this.keyboardEventsManager.activeItem.nativeElement.textContent);
+                this.searchForm.get('searchControl')
+                    .patchValue(this.keyboardEventsManager.activeItem.nativeElement.textContent
+                        .replace(/\s+/g, ' ').split('-')[0]);
                 return false;
             }
         }
@@ -231,27 +171,36 @@ export class HomeComponent implements OnInit {
     }
 
     adicionarCard() {
-        const retornoPesquisa = this.cardPesquisa.filter((card: CardModel) => {
-            if (card.getAbreviationName().toUpperCase() === this.inputSearch.nativeElement.value.toUpperCase()
-                || card.getName().toUpperCase() === this.inputSearch.nativeElement.value.toUpperCase()) {
-                return card;
-            }
-        });
+        let retornoPesquisa = [];
 
-        if (retornoPesquisa.length > 0) {
-            const comparacao = this.cards.filter((card: CardModel) => {
-                if (retornoPesquisa[0] == card) { return card; }
+        this.alphaService.getCard().subscribe((cards: Cards) => {
+            console.log(cards['cards']);
+            retornoPesquisa = cards.cards.filter((res: Card) => {
+                if (res.abreviationName
+                        .toUpperCase().replace(/\s+/g, '') === this.inputSearch.nativeElement.value
+                                                                .toUpperCase().replace(/\s+/g, '')
+                    || res.name
+                        .toUpperCase().replace(/\s+/g, '') === this.inputSearch.nativeElement.value
+                                                                .toUpperCase().replace(/\s+/g, '')) {
+                    return res;
+                }
             });
 
-            if (comparacao.length == 0) {
-                this.cards.push(retornoPesquisa[0]);
+            if (retornoPesquisa.length > 0) {
+                const comparacao = this.cardsAdicionado.filter((card: Card) => {
+                    if (retornoPesquisa[0] == card) { return card; }
+                });
+
+                if (comparacao.length == 0) {
+                    this.cardsAdicionado.push(retornoPesquisa[0]);
+                } else {
+                    this.alertService.alertSuccess(AlertType.INFO, '', 'Card Já Foi Adicionado');
+                }
             } else {
-                this.alertService.alertSuccess(AlertType.INFO, '', 'Card Já Foi Adicionado');
+                this.definirBoxShadow('0px 0px 10px red');
+                this.alertService.alertSuccess(AlertType.ERROR, '', 'Card não encontrado');
             }
-        } else {
-            this.definirBoxShadow('0px 0px 10px red');
-            this.alertService.alertSuccess(AlertType.ERROR, '', 'Card não encontrado');
-        }
+        });
     }
 
     alterarIconCard(index: string, event: string) {
@@ -278,7 +227,7 @@ export class HomeComponent implements OnInit {
     }
 
     excluirCard(index: number) {
-        this.cards.splice(index, 1);
+        this.cardsAdicionado.splice(index, 1);
     }
 
     openModal() {
@@ -290,6 +239,6 @@ export class HomeComponent implements OnInit {
     }
 
     drop(event: CdkDragDrop<string[]>) {
-        moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
+        moveItemInArray(this.cardsAdicionado, event.previousIndex, event.currentIndex);
     }
 }

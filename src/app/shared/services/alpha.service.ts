@@ -1,3 +1,4 @@
+import { Cards } from './../../models/login/card.model';
 import { Observable } from 'rxjs';
 import { FileService } from './file.service';
 import { Injectable } from '@angular/core';
@@ -14,6 +15,15 @@ export class AlphaService {
             .pipe(
                 switchMap(res => {
                     return this.fileService.getResults();
+                })
+            );
+    }
+
+    getCard(): Observable<Cards> {
+        return this.fileService.getUrl()
+            .pipe(
+                switchMap(res => {
+                    return this.fileService.getCards();
                 })
             );
     }

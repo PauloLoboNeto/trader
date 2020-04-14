@@ -1,0 +1,133 @@
+{
+    "cards": [{
+            "name": "ITAÚ PERSONNALITÉ AÇÕES INDEX IBOVESPA",
+            "abreviationName": "F00000N9FY",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Apple Inc.",
+            "abreviationName": "AAPL",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Amazon.com Inc.",
+            "abreviationName": "AMZN",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "iShares Ibovespa Fundo de Índice ETF",
+            "abreviationName": "BOVA11",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Bank of America Corporation",
+            "abreviationName": "BAC",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Carnival Corporation & Plc",
+            "abreviationName": "CCL",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Dow Inc.",
+            "abreviationName": "DOW",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Decision Diagnostics Corp.",
+            "abreviationName": "DECN",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Exxon Mobil Corporation",
+            "abreviationName": "XOM",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Enterprise Products Partners L.P.",
+            "abreviationName": "EPD",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Hilton Worldwide Holdings Inc.",
+            "abreviationName": "HLT",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Las Vegas Sands Corp.",
+            "abreviationName": "LVS",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        },
+        {
+            "name": "Vanguard Total Stock Market Index Fund ETF Shares",
+            "abreviationName": "VTI",
+            "value": "129,99",
+            "porcentage": "+1,29%",
+            "minimo": "48,80",
+            "maximo": "59,80",
+            "date": "27/03/2020",
+            "dateTime": "17:31:57"
+        }
+    ]
+}

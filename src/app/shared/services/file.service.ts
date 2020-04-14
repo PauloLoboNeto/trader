@@ -15,5 +15,9 @@ export class FileService {
     getResults(): Observable<any> {
         return this.http.get(`${this.PATH_STATIC}results.json`);
     }
+
+    getCards(): Observable<any> {
+        return this.http.get(`${this.PATH_STATIC}cards.json`);
+    }
 }
 

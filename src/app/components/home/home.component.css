@@ -80,7 +80,9 @@
 .ul-search {
     padding-left: 15px;
     padding-right: 15px;
-    margin-bottom: 10px;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    margin-bottom: 0px;
     cursor: pointer;
     font-family: 'Courier New', Courier, monospace;
     font-size: 12px;

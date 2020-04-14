@@ -8,7 +8,7 @@
                     <i class="{{currentIconInput}} icon-x" aria-hidden="true" (mouseenter)="currentIconInput = 'fa fa-times-circle'" (mouseleave)="currentIconInput = 'fa fa-times-circle-o'" (click)="apagarPesquisa()"></i>
                     <input formControlName="searchControl" (keyup)="handleKeyUp($event)" id="searchControl" class="input-style" #inputSearch (click)="atribuirCor()" (blur)="removerCor()" maxlength="30" type="text" autocomplete="off">
                     <div [@openCloseTrigger]="openCloseTrigger ? 'open' : 'closed'" class="col-12" style="display: none;" *ngIf="openCloseTrigger">
-                        <ng-container *ngFor="let p of resultsSearch | slice:0:3; let i = index">
+                        <ng-container *ngFor="let p of resultsSearch | slice:0:5; let i = index">
                             <ul class="text-left ul-search" #ulSearch>
                                 <i class="fa fa-search" aria-hidden="true" style="margin-right: 10px; color: #acacac"></i>
                                 <span>{{p['2. name']}} - {{p['1. symbol']}}</span>
@@ -20,8 +20,8 @@
         </div>
     </form>
 
-    <div *ngIf="cards.length > 0" class="row example-list" #card cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
-        <div class="col-3 example-box" cdkDrag *ngFor="let l of cards; let i = index" @flyInOut>
+    <div *ngIf="cardsAdicionado.length > 0" class="row example-list" #card cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
+        <div class="col-3 example-box" cdkDrag *ngFor="let l of cardsAdicionado; let i = index" @flyInOut>
             <div class="card space-b">
                 <div class="card-body" style="padding-bottom: 0px;">
                     <div class="handle" cdkDragHandle>
@@ -37,8 +37,8 @@
                     </div>
                     <div class="row">
                         <div class="col-8" style="display: flex; flex-direction: column; padding-left: 10px;">
-                            <label style="font-size: 14px; margin-bottom: 0px;"><strong>{{l.getAbreviationName()}}</strong></label>
-                            <label style="font-size: 8px;">{{l.getName()}}</label>
+                            <label style="font-size: 14px; margin-bottom: 0px;"><strong>{{l.abreviationName}}</strong></label>
+                            <label style="font-size: 8px;">{{l.name}}</label>
                         </div>
                     </div>
                     <div class="row">
@@ -47,26 +47,26 @@
                                 <label style="font-size: 10px;">R$</label>
                             </div>
                             <div class="col-10" style="padding-left: 0px;">
-                                <label style="font-size: 25px;">{{l.getValue()}}</label>
+                                <label style="font-size: 25px;">{{l.value}}</label>
                             </div>
                         </div>
                         <div class="col-6 text-right" style="padding-top: 10px; padding-right: 10px;">
-                            <label style="font-size: 16px; color: green;">{{l.getPorcentage()}}</label>
+                            <label style="font-size: 16px; color: green;">{{l.porcentage}}</label>
                         </div>
                     </div>
                     <div class="row space-t">
                         <div class="col-8" style="display: flex; flex-direction: row; padding-left: 10px;">
                             <div class="col-6 text-left" style="display: flex; flex-direction: column; padding-left: 0px;">
                                 <label style="font-size: 11px; margin-bottom: 0px;">Mín.</label>
-                                <label style="font-size: 11px;">{{l.getMin()}}</label>
+                                <label style="font-size: 11px;">{{l.minimo}}</label>
                             </div>
                             <div class="col-6" style="display: flex; flex-direction: column; padding-left: 0px;">
                                 <label style="font-size: 11px; margin-bottom: 0px;">Máx.</label>
-                                <label style="font-size: 11px;">{{l.getMax()}}9</label>
+                                <label style="font-size: 11px;">{{l.maximo}}</label>
                             </div>
                         </div>
                         <div class="col-4 text-right" style="padding-right: 10px;">
-                            <label style="font-size: 10px;">{{l.getDate()}} {{l.getDateTime()}}</label>
+                            <label style="font-size: 10px;">{{l.date}} {{l.dateTime}}</label>
                         </div>
                     </div>
                     <div class="row">
@@ -80,8 +80,8 @@
             </div>
         </div>
     </div>
-    <div *ngIf="cards.length == 0" class="text-center">
-        <div class="col-12" style="padding-left: 0px; padding-top: 110px;">
+    <div *ngIf="cardsAdicionado.length == 0" class="text-center">
+        <div class="col-12" style="padding-left: 0px; padding-top: 10px;">
             <span style="font-size: 24px; color: white;">Não há dados pra exibir</span>
         </div>
     </div>
