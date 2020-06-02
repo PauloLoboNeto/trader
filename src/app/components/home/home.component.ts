@@ -174,8 +174,8 @@ export class HomeComponent implements OnInit {
         let retornoPesquisa = [];
 
         this.alphaService.getCard().subscribe((cards: Cards) => {
-            console.log(cards['cards']);
-            retornoPesquisa = cards.cards.filter((res: Card) => {
+            console.log(cards['companyAction']);
+            retornoPesquisa = cards.companyAction.filter((res: Card) => {
                 if (res.abreviationName
                         .toUpperCase().replace(/\s+/g, '') === this.inputSearch.nativeElement.value
                                                                 .toUpperCase().replace(/\s+/g, '')

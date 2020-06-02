@@ -1,0 +1,24 @@
+<div class="bottom  popover in bottom-left" [ngStyle]="{'background-color': 'white', 'z-index': '1', 'display': 'block', 'top': getTop(), 'left': getLeft()}">
+    <div class="arrow" style="top: -11px; left: 6px;"></div>
+    <div>
+        <div class="popover-inner">
+            <h3 class="popover-title">Nav</h3>
+            <div class="popover-content">
+                <div class="">
+                    <div class="popover-content">I am a fixed element. I shouldn't scroll with the page.</div>
+                    <div class="popover-navigation">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-default" (click)="prevNext(-1)">&laquo;
+                                Prev</button>
+                            <button type="button" class="btn btn-sm btn-default" (click)="prevNext(1)">Next
+                                &raquo;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- <div class="tour-overlay"></div> -->

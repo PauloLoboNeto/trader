@@ -1,3 +1,5 @@
+import { CoachMarkComponent } from './shared/coachmark/componentowner.component';
+// import { QrCodeComponent } from './components/qrcode/qrcode.component';
 import { AlphaService } from './shared/services/alpha.service';
 import { FileService } from './shared/services/file.service';
 import { GraphicComponent } from './components/graphic/graphic.component';
@@ -16,6 +18,8 @@ import { AlertService } from './shared/services/alert/alert.service';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ModalBodyComponent } from './components/modal/modal-body/modal-body.component';
 import { HttpClientModule } from '@angular/common/http';
+import { CMDirective } from './shared/coachmark/directive/cmDirective.directive';
+// import { NgQRCodeReaderModule } from 'ng2-qrcode-reader';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,10 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent,
     GraphicComponent,
     ModalComponent,
-    ModalBodyComponent
+    ModalBodyComponent,
+    CoachMarkComponent,
+    CMDirective
+    // QrCodeComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +41,7 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    // NgQRCodeReaderModule,
     GoogleChartsModule.forRoot()
   ],
   providers: [AlertService, FileService, AlphaService],

@@ -1,31 +1,32 @@
 <form [formGroup]="groupLogin">
-  <div class="row" style="margin-top: 8%; margin-left: 0px; margin-right: 0px;">
-    <h2 style="margin-left: auto; margin-right: auto; color:antiquewhite">{{mensagem}}</h2>
-  </div>
-  <div class="row" style="padding-top: 20px; margin-left: 0px; margin-right: 0px;">
-    <div class="col-4"></div>
-    <div class="col-4">
-      <div class="card">
-        <div class="card-body" style="padding-top: 60px; padding-bottom: 40px;">
-          <div class="input-container">
-            <i class="fa fa-user-o icon" aria-hidden="true"></i>
-            <input class="input-field" type="text" formControlName="usuario" placeholder="Usuário">
-          </div>
-          <div class="input-container">
-            <i class="fa fa-key icon" aria-hidden="true"></i>
-            <input class="input-field" type="text" formControlName="senha" placeholder="Senha">
-          </div>
-          <div class="row">
-            <div class="col-3"></div>
-            <div class="col-6" style="padding-top: 10px;">
-              <button type="submit" class="btn" (click)="logar(groupLogin.get('usuario').value, groupLogin.get('senha').value)">Entrar</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="row" style="margin-top: 8%; margin-left: 0px; margin-right: 0px;">
+        <h2 style="margin-left: auto; margin-right: auto; color:antiquewhite">{{mensagem}}</h2>
     </div>
-    <div class="col-4"></div>
-  </div>
+    <div class="row" style="padding-top: 20px; margin-left: 0px; margin-right: 0px;">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body" style="padding-top: 60px; padding-bottom: 40px;">
+                    <div class="input-container">
+                        <i class="fa fa-user-o icon" aria-hidden="true"></i>
+                        <input cm class="input-field" type="text" formControlName="usuario" placeholder="Usuário">
+                    </div>
+                    <div class="input-container">
+                        <i class="fa fa-key icon" aria-hidden="true"></i>
+                        <input cm class="input-field" type="text" formControlName="senha" placeholder="Senha">
+                    </div>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6" style="padding-top: 10px;">
+                            <button cm type="submit" class="btn" (click)="logar(groupLogin.get('usuario').value, groupLogin.get('senha').value)">Entrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4"></div>
+    </div>
 </form>
 
 
+<app-coachmark-component #coach></app-coachmark-component>

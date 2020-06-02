@@ -1,0 +1,7 @@
+<div style="text-align:center">
+    <h2>Upload an QR code</h2>
+    <input type="file" #file name="file" id="file" (change)="preview(file.files)">
+    <ng2-qrcode-reader (result)="render($event)" [qrr-show]="showQRCode" [qrr-value]="value" [qrr-type]="elementType">
+    </ng2-qrcode-reader><br>
+    <div #result></div>
+</div>

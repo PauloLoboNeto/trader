@@ -10,5 +10,5 @@ export class Card {
 }
 
 export class Cards {
-    cards: Card[] = new Array<Card>();
+    companyAction: Card[] = new Array<Card>();
 }
