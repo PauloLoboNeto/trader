@@ -1,4 +1,4 @@
-export class Elements {
+export class Element {
     id: string;
     title: string;
     content: string;
@@ -12,6 +12,8 @@ export class CoachMarkModel {
     placement: string;
     positionPopover: Position;
     positionArrow: Position;
+    zIndex: string;
+    display: string;
 }
 
 export class Position {

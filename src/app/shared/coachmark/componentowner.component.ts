@@ -1,8 +1,8 @@
-import { CoachMarkModel, Elements, Position } from './model/coachmark.model';
+import { CoachMarkModel, Element, Position } from './model/coachmark.model';
 import {
     Component,
     Renderer2, ElementRef,
-    ChangeDetectorRef, Injector, Input, OnInit
+    Input, OnInit, NgZone, AfterViewChecked, ViewChild
 } from '@angular/core';
 
 @Component({
@@ -11,87 +11,143 @@ import {
     styleUrls: ['./componentowner.component.css']
 
 })
-export class CoachMarkComponent implements OnInit {
-    position = 0;
-    @Input() elements: Elements[];
-    cms = new Array<CoachMarkModel>();
-    actualElement: CoachMarkModel = new CoachMarkModel();
-    prevElement: CoachMarkModel = new CoachMarkModel();
+export class CoachMarkComponent implements OnInit, AfterViewChecked {
 
-    constructor(private render: Renderer2) { }
+    @Input() elements: Element[];
+
+    position = 0;
+    prevElement: CoachMarkModel = new CoachMarkModel();
+    actualElement: CoachMarkModel = new CoachMarkModel();
+
+    constructor(private render: Renderer2, private ngZone: NgZone) { }
 
     ngOnInit() {
-        this.cms = this.convertToCoachMarkModel(this.elements);
-        this.focusOnCoachMarkElement(this.getNextPrevElement(this.position));
+        this.first();
     }
 
-    getNextPrevElement(value: number) {
-        this.prevElement = this.cms[this.position];
-        this.position += value;
-        return this.cms[this.position];
+    ngAfterViewChecked() {
+        window.onresize = (e: any) => {
+            this.ngZone.run(() => {
+                this.actualElement = this.getElement(this.position);
+            });
+        };
     }
 
-    focusOnCoachMarkElement(el: CoachMarkModel, prevNext?: number) {
-        this.aplicarEstilos(el, prevNext);
-        window.parent.scroll(0, el.elementId.getBoundingClientRect().top);
+    first() {
+        this.actualElement = this.getElement(this.position);
+        this.applyStyleOnElementActive('first');
     }
 
-    aplicarEstilos(el: CoachMarkModel, prevNext?: number) {
-        this.actualElement = el;
-        this.render.setStyle(this.actualElement.elementId, 'z-index', '1');
+    prev() {
+        this.prevElement = this.getElement(this.position);
+        this.position += -1;
+        this.actualElement = this.getElement(this.position);
+        this.applyStyleOnElementActive();
+    }
+
+    next() {
+        this.prevElement = this.getElement(this.position);
+        this.position += 1;
+        this.actualElement = this.getElement(this.position);
+        this.applyStyleOnElementActive();
+    }
+
+    private getElement(index: number): CoachMarkModel {
+        const element: CoachMarkModel = new CoachMarkModel();
+        element.elementId = document.getElementById(this.elements[index].id);
+        element.content = this.elements[index].content;
+        element.placement = this.elements[index].placement;
+        element.positionPopover = new Position(this.calcTop(element.elementId), this.calcLeft(element.elementId));
+        element.positionArrow = new Position('-11px', '15px');
+        element.title = this.elements[index].title;
+        element.zIndex = '1101';
+        element.display = 'block';
+        return element;
+    }
+
+    private applyStyleOnElementActive(el?: any) {
+        this.render.setStyle(this.actualElement.elementId, 'z-index', '1101');
         this.render.setStyle(this.actualElement.elementId, 'position', 'relative');
-        // console.log(this.prevElement.elementId.style.content);
-        if (prevNext != undefined) {
+
+        if (el != 'first') {
             this.render.removeStyle(this.prevElement.elementId, 'z-index');
-            this.render.setStyle(this.prevElement.elementId, 'position', this.prevElement.elementId.getAttribute('position'));
+            this.render.removeStyle(this.prevElement.elementId, 'position');
         }
     }
 
-    getTopPopover() {
-        return this.actualElement.positionPopover.top;
+    private calcTop(el: HTMLElement) {
+        return Math.round(el.getBoundingClientRect().bottom + window.scrollY) + 'px';
     }
 
-    getLeftPopover() {
-        return this.actualElement.positionPopover.left;
+    private calcLeft(el: HTMLElement) {
+        return Math.round((el.getBoundingClientRect().right + window.scrollX) - (el.getBoundingClientRect().width / 2)) + 'px';
     }
 
-    getTopArrow() {
-        return this.actualElement.positionArrow.top;
+    getTopBackgroundStepActive(): string {
+        return Math.round(this.actualElement.elementId.getBoundingClientRect().top + window.scrollY) + 'px';
     }
 
-    getLeftArrow() {
-        return this.actualElement.positionArrow.left;
+    getLeftBackgroundStepActive(): string {
+        return Math.round(this.actualElement.elementId.getBoundingClientRect().left + window.scrollX) + 'px';
     }
 
-    getTitle() {
-        return this.actualElement.title;
+    getWidthBackgroundStepActive(): string {
+        return Math.round(this.actualElement.elementId.getBoundingClientRect().width) + 'px';
     }
 
-    getContent() {
-        return this.actualElement.content;
+    getHeightBackgroundStepActive(): string {
+        return Math.round(this.actualElement.elementId.getBoundingClientRect().height) + 'px';
     }
 
-
-    private convertToCoachMarkModel(elements: Elements[]): CoachMarkModel[] {
-        const coachs = new Array<CoachMarkModel>();
-        elements.map((val: Elements) => {
-            const cm = new CoachMarkModel();
-            cm.elementId = document.getElementById(val.id);
-            cm.content = val.content;
-            cm.placement = val.placement;
-            cm.positionPopover = new Position(this.calcTop(cm.elementId), this.calcLeft(cm.elementId));
-            cm.positionArrow = new Position('-11px', '15px');
-            cm.title = val.title;
-            coachs.push(cm);
-        });
-        return coachs;
+    showNext(): boolean {
+        if (this.elements.length > 0 && this.position < this.elements.length - 1) {
+            return true;
+        }
     }
 
-    private calcTop(el: any) {
-        return Math.round(el.getBoundingClientRect().bottom) + 'px';
+    finalizar() {
+        console.log('finalizar');
     }
 
-    private calcLeft(el: any) {
-        return Math.round(el.getBoundingClientRect().right - (el.getBoundingClientRect().width / 2)) + 'px';
-    }
+    // export function offset(el) {
+    //     const elBCR = el.getBoundingClientRect();
+    //     return {
+    //         width: Math.round(typeof elBCR.width === 'number' ? elBCR.width : elem.offsetWidth),
+    //         height: Math.round(typeof elBCR.height === 'number' ? elBCR.height : elem.offsetHeight),
+    //         top: Math.round(elBCR.top + (window.pageYOffset || document.documentElement.scrollTop)),
+    //         left: Math.round(elBCR.left + (window.pageXOffset || document.documentElement.scrollLeft)),
+    //         viewportWidth: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
+    //         viewportHeight: Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+    //     };
+    // }
+
+    // export function addClass(el, className) {
+    //     const classes = className.split(' ');
+    //     classes.filter(className => className.length).forEach(className => {
+    //         if (el.classList) {
+    //             el.classList.add(className);
+    //         } else {     
+    //             if (el.className.toString() === '[object SVGAnimatedString]') {
+    //                 el.className.baseVal += (el.className.baseVal.length ? ' ' : '') + className;
+    //             } else {
+    //                 el.className += (el.className.length ? ' ' : '') + className;
+    //             }
+    //         }
+    //     });
+    // }
+
+    // export function removeClass(el, className) {
+    //     const classes = className.split(' ');
+    //     classes.filter(className => className.length).forEach(className => {
+    //         if (el.classList) {
+    //             el.classList.remove(className);
+    //         } else {
+    //             if (el.className.toString() === '[object SVGAnimatedString]'){
+    //                 el.className.baseVal = el.className.baseVal.toString().replace(new RegExp('(^|\s)' + className.split(' ').join('|') + '(\s|$)', 'gi'), ' ');
+    //             } else {
+    //                 el.className = el.className.toString().replace(new RegExp('(^|\s)' + className.split(' ').join('|') + '(\s|$)', 'gi'), ' ');
+    //             }         
+    //         }
+    //     });
+    // }
 }
