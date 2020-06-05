@@ -1,27 +1,21 @@
-<div class="bottom  popover in bottom-left" [ngStyle]="{'z-index': actualElement.zIndex, 'display': actualElement.display, 'top': actualElement.positionPopover.top, 'left': actualElement.positionPopover.left}">
-    <div class="arrow" [ngStyle]="{'top': actualElement.positionArrow.top, 'left': actualElement.positionArrow.left}"></div>
+<div class="popover" id="popove" [ngStyle]="{'z-index': actualElement.zIndex, 'display': actualElement.display, 'top': calcTop(), 'left':  calcLeft()}">
+    <div class="arrow"></div>
     <div>
-        <div class="popover-inner">
-            <h3 class="popover-title">{{actualElement.title}}</h3>
-            <div class="popover-content">
-                <div class="">
-                    <div class="popover-content">{{actualElement.content}}</div>
-                    <div class="popover-navigation">
-                        <div class="btn-group">
-                            <button *ngIf="position != 0" type="button" class="btn btn-sm btn-default" (click)="prev()">&laquo;
-                                Prev</button>
-                            <button *ngIf="showNext()" type="button" class="btn btn-sm btn-default" (click)="next()">Next
-                                &raquo;</button>
-                            <button *ngIf="position == elements.length - 1" type="button" class="btn btn-sm btn-default" (click)="finalizar()">Finalizar</button>
-                        </div>
-                    </div>
+        <h3 class="popover-title">{{actualElement.title}}</h3>
+        <div class="popover-content">
+            <div class="">
+                <div class="popover-content">{{actualElement.content}}</div>
+                <div class="btn-group">
+                    <button *ngIf="position != 0" type="button" class="btn btn-sm btn-default" (click)="prev()">&laquo;
+                        Prev</button>
+                    <button *ngIf="showNext()" type="button" class="btn btn-sm btn-default" (click)="next()">Next
+                        &raquo;</button>
+                    <button *ngIf="position == elements.length - 1" type="button" class="btn btn-sm btn-default" (click)="finalizar()">Finalizar</button>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
 <div class="tour-overlay"></div>
 
 <div class="tour-step-background" [ngStyle]="{'top': getTopBackgroundStepActive(), 'left': getLeftBackgroundStepActive(), 

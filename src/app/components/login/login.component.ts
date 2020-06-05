@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
     groupLogin: FormGroup;
     user = 'admin';
     password = 'admin';
-    // ids: Element[] = new Array<Element>();
+    ids: Element[] = new Array<Element>();
 
     constructor(private formBuilder: FormBuilder,
                 private readonly router: Router

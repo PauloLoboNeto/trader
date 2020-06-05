@@ -1,8 +1,8 @@
-import { CoachMarkModel, Element, Position } from './model/coachmark.model';
+import { CoachMarkModel, Element, Place } from './model/coachmark.model';
 import {
     Component,
     Renderer2, ElementRef,
-    Input, OnInit, NgZone, AfterViewChecked, ViewChild
+    Input, OnInit, NgZone, AfterViewChecked, ViewChild, OnChanges
 } from '@angular/core';
 
 @Component({
@@ -11,7 +11,7 @@ import {
     styleUrls: ['./componentowner.component.css']
 
 })
-export class CoachMarkComponent implements OnInit, AfterViewChecked {
+export class CoachMarkComponent implements OnInit, OnChanges {
 
     @Input() elements: Element[];
 
@@ -25,13 +25,14 @@ export class CoachMarkComponent implements OnInit, AfterViewChecked {
         this.first();
     }
 
-    ngAfterViewChecked() {
+    ngOnChanges() {
         window.onresize = (e: any) => {
             this.ngZone.run(() => {
                 this.actualElement = this.getElement(this.position);
             });
         };
     }
+
 
     first() {
         this.actualElement = this.getElement(this.position);
@@ -57,8 +58,6 @@ export class CoachMarkComponent implements OnInit, AfterViewChecked {
         element.elementId = document.getElementById(this.elements[index].id);
         element.content = this.elements[index].content;
         element.placement = this.elements[index].placement;
-        element.positionPopover = new Position(this.calcTop(element.elementId), this.calcLeft(element.elementId));
-        element.positionArrow = new Position('-11px', '15px');
         element.title = this.elements[index].title;
         element.zIndex = '1101';
         element.display = 'block';
@@ -75,12 +74,46 @@ export class CoachMarkComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    private calcTop(el: HTMLElement) {
-        return Math.round(el.getBoundingClientRect().bottom + window.scrollY) + 'px';
+    calcTop() {
+        const actualElementId = this.actualElement.elementId;
+        const popove = document.getElementById('popove');
+        this.render.removeClass(popove, 'bottom');
+        this.render.removeClass(popove, 'left');
+        this.render.removeClass(popove, 'top');
+        this.render.removeClass(popove, 'right');
+        this.render.addClass(popove, this.actualElement.placement.toLowerCase());
+
+        const commonY = Math.round((actualElementId.getBoundingClientRect().bottom
+            - actualElementId.getBoundingClientRect().height / 2) - popove.getBoundingClientRect().height / 2) + 'px';
+
+        switch (this.actualElement.placement) {
+            case Place.BOTTOM:
+                return Math.round(actualElementId.getBoundingClientRect().bottom) + 'px';
+            case Place.TOP:
+                return Math.round(actualElementId.getBoundingClientRect().top - popove.offsetHeight) + 'px';
+            case Place.LEFT:
+            case Place.RIGHT:
+                return commonY;
+        }
     }
 
-    private calcLeft(el: HTMLElement) {
-        return Math.round((el.getBoundingClientRect().right + window.scrollX) - (el.getBoundingClientRect().width / 2)) + 'px';
+    calcLeft() {
+        const popove = document.getElementById('popove');
+
+        switch (this.actualElement.placement) {
+            case Place.BOTTOM:
+            case Place.TOP:
+                return Math.round((this.actualElement.elementId.getBoundingClientRect().right + window.scrollX)
+                    - (this.actualElement.elementId.getBoundingClientRect().width / 1.2)) + 'px';
+
+            case Place.LEFT:
+                return Math.round(this.actualElement.elementId.getBoundingClientRect().left - popove.offsetWidth) + 'px';
+
+            case Place.RIGHT:
+                return Math.round(this.actualElement.elementId.getBoundingClientRect().left
+                    + this.actualElement.elementId.getBoundingClientRect().width) + 'px';
+        }
+
     }
 
     getTopBackgroundStepActive(): string {
@@ -107,6 +140,15 @@ export class CoachMarkComponent implements OnInit, AfterViewChecked {
 
     finalizar() {
         console.log('finalizar');
+    }
+
+
+    getZIndexActualElement() {
+        return this.actualElement.zIndex;
+    }
+
+    getDisplayActualElement() {
+        return this.actualElement.display;
     }
 
     // export function offset(el) {
