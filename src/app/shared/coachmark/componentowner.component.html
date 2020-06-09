@@ -1,21 +1,25 @@
-<div class="popover" id="popove" [ngStyle]="{'z-index': actualElement.zIndex, 'display': actualElement.display, 'top': calcTop(), 'left':  calcLeft()}">
+<div class="popover" id="popove" [ngStyle]="{ 
+              'height': getHeight(), 'width': getWidth(),
+              'left':  getLeft(), 'top': getTop(),
+            'min-width': '200px', 'min-height': '150px'}">
     <div class="arrow"></div>
-    <div>
-        <h3 class="popover-title">{{actualElement.title}}</h3>
-        <div class="popover-content">
-            <div class="">
-                <div class="popover-content">{{actualElement.content}}</div>
-                <div class="btn-group">
-                    <button *ngIf="position != 0" type="button" class="btn btn-sm btn-default" (click)="prev()">&laquo;
-                        Prev</button>
-                    <button *ngIf="showNext()" type="button" class="btn btn-sm btn-default" (click)="next()">Next
-                        &raquo;</button>
-                    <button *ngIf="position == elements.length - 1" type="button" class="btn btn-sm btn-default" (click)="finalizar()">Finalizar</button>
-                </div>
-            </div>
+    <div style="height: inherit; padding-top: 5px;">
+
+        <h3 class="col-12 popover-title" style="padding-left: 7px; padding-right: 9px;">{{actualElement.title}}</h3>
+
+        <div class="col-12 popover-content" style="padding-left: 7px; padding-right: 9px;">{{actualElement.content}}</div>
+
+        <div class="col-12" style="position: absolute; bottom: 0%; padding-left: 7px; padding-right: 9px; padding-bottom: 4px;">
+            <a style="float:right; cursor: pointer; text-decoration: underline;" *ngIf="showNext()" (click)="next()">Próximo</a>
+            <a style="float:right; cursor: pointer; text-decoration: underline;" *ngIf="position == elements.length - 1" (click)="finalizar()">Ok, entendi!</a>
+            <a style="float:left; cursor: pointer; text-decoration: underline; margin-right: 5px;" *ngIf="position != 0" (click)="prev()">Anterior</a>
         </div>
+
     </div>
 </div>
+
+
+
 <div class="tour-overlay"></div>
 
 <div class="tour-step-background" [ngStyle]="{'top': getTopBackgroundStepActive(), 'left': getLeftBackgroundStepActive(), 

@@ -54,13 +54,17 @@ export class CoachMarkComponent implements OnInit, OnChanges {
     }
 
     private getElement(index: number): CoachMarkModel {
+        const popove = document.getElementById('popove');
         const element: CoachMarkModel = new CoachMarkModel();
         element.elementId = document.getElementById(this.elements[index].id);
+        element.width = this.elements[index].width;
+        element.height = this.elements[index].height;
         element.content = this.elements[index].content;
         element.placement = this.elements[index].placement;
         element.title = this.elements[index].title;
-        element.zIndex = '1101';
-        element.display = 'block';
+        element.top = this.calcTop(element.elementId, element.height, element.placement);
+        element.left = this.calcLeft(element.elementId, element.width, element.placement);
+        this.applyClassPlacement(popove, element.placement);
         return element;
     }
 
@@ -74,46 +78,49 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         }
     }
 
-    calcTop() {
-        const actualElementId = this.actualElement.elementId;
-        const popove = document.getElementById('popove');
-        this.render.removeClass(popove, 'bottom');
-        this.render.removeClass(popove, 'left');
-        this.render.removeClass(popove, 'top');
-        this.render.removeClass(popove, 'right');
-        this.render.addClass(popove, this.actualElement.placement.toLowerCase());
-
-        const commonY = Math.round((actualElementId.getBoundingClientRect().bottom
-            - actualElementId.getBoundingClientRect().height / 2) - popove.getBoundingClientRect().height / 2) + 'px';
-
-        switch (this.actualElement.placement) {
+    private calcTop(id: HTMLElement, height: number, placement: string): number {
+        if (height < 150) {
+            height = 150;
+        }
+        const commonY = Math.round(id.getBoundingClientRect().bottom - id.getBoundingClientRect().height / 2 - height / 2 + window.scrollY);
+        switch (placement) {
             case Place.BOTTOM:
-                return Math.round(actualElementId.getBoundingClientRect().bottom) + 'px';
+                return Math.round(id.getBoundingClientRect().bottom + window.scrollY);
             case Place.TOP:
-                return Math.round(actualElementId.getBoundingClientRect().top - popove.offsetHeight) + 'px';
+                return Math.round(id.getBoundingClientRect().top - height + window.scrollY);
             case Place.LEFT:
             case Place.RIGHT:
                 return commonY;
         }
     }
 
-    calcLeft() {
-        const popove = document.getElementById('popove');
-
-        switch (this.actualElement.placement) {
+    private calcLeft(id: HTMLElement, width: number, placement: string): number {
+        if (width < 200) {
+            width = 200;
+        }
+        switch (placement) {
             case Place.BOTTOM:
             case Place.TOP:
-                return Math.round((this.actualElement.elementId.getBoundingClientRect().right + window.scrollX)
-                    - (this.actualElement.elementId.getBoundingClientRect().width / 1.2)) + 'px';
-
+                return Math.round((id.getBoundingClientRect().right - id.getBoundingClientRect().width / 2
+                    - width / 2) + window.scrollX);
             case Place.LEFT:
-                return Math.round(this.actualElement.elementId.getBoundingClientRect().left - popove.offsetWidth) + 'px';
-
+                return Math.round(id.getBoundingClientRect().left - width);
             case Place.RIGHT:
-                return Math.round(this.actualElement.elementId.getBoundingClientRect().left
-                    + this.actualElement.elementId.getBoundingClientRect().width) + 'px';
+                return Math.round(id.getBoundingClientRect().left
+                    + id.getBoundingClientRect().width);
         }
+    }
 
+    getHeights(): string {
+        return (this.actualElement.height + window.scrollY) + 'px';
+    }
+
+    private applyClassPlacement(el: any, place: string) {
+        this.render.removeClass(el, 'bottom');
+        this.render.removeClass(el, 'left');
+        this.render.removeClass(el, 'top');
+        this.render.removeClass(el, 'right');
+        this.render.addClass(el, place.toLowerCase());
     }
 
     getTopBackgroundStepActive(): string {
@@ -128,6 +135,22 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         return Math.round(this.actualElement.elementId.getBoundingClientRect().width) + 'px';
     }
 
+    getHeight(): string {
+        return this.actualElement.height + 'px';
+    }
+
+    getTop(): string {
+        return this.actualElement.top + 'px';
+    }
+
+    getLeft(): string {
+        return this.actualElement.left + 'px';
+    }
+
+    getWidth(): string {
+        return this.actualElement.width + 'px';
+    }
+
     getHeightBackgroundStepActive(): string {
         return Math.round(this.actualElement.elementId.getBoundingClientRect().height) + 'px';
     }
@@ -140,15 +163,6 @@ export class CoachMarkComponent implements OnInit, OnChanges {
 
     finalizar() {
         console.log('finalizar');
-    }
-
-
-    getZIndexActualElement() {
-        return this.actualElement.zIndex;
-    }
-
-    getDisplayActualElement() {
-        return this.actualElement.display;
     }
 
     // export function offset(el) {

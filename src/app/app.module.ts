@@ -19,7 +19,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ModalBodyComponent } from './components/modal/modal-body/modal-body.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CMDirective } from './shared/coachmark/directive/cmDirective.directive';
-import { A } from './components/a.component';
+import { A } from './components/login/a.component';
 // import { NgQRCodeReaderModule } from 'ng2-qrcode-reader';
 
 @NgModule({

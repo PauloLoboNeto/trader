@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Element, Place } from './../shared/coachmark/model/coachmark.model';
+import { Element, Place } from '../../shared/coachmark/model/coachmark.model';
 
 @Component({
   selector: 'a-root',
@@ -34,6 +34,12 @@ export class A {
     el4.content = 'Input 4';
     el4.placement = Place.BOTTOM;
     el4.title = 'titulo input-4';
-    this.ids.push(el1, el2, el3, el4);
+
+    const el5 = new Element();
+    el4.id = 'texto';
+    el4.content = 'Input 4';
+    el4.placement = Place.BOTTOM;
+    el4.title = 'titulo input-4';
+    this.ids.push(el1, el2, el3, el4, el5);
   }
 }

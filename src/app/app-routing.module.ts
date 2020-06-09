@@ -3,11 +3,11 @@ import { LoginComponent } from './components/login/login.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { A } from './components/a.component';
+import { A } from './components/login/a.component';
 
 
 const routes: Routes = [
-  { path: '', component: A },
+  { path: '', component: LoginComponent },
   { path: 'home-component', component: HomeComponent}
 ];
 

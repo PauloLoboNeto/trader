@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     ids: Element[] = new Array<Element>();
 
     constructor(private formBuilder: FormBuilder,
-                private readonly router: Router
+        private readonly router: Router
     ) { }
 
     ngOnInit() {
@@ -27,25 +27,47 @@ export class LoginComponent implements OnInit {
         this.groupLogin = formularioLoginModel.inicializarFormulario();
         this.mensagem = 'Trader Angular';
 
-        // const el1 = new Element();
-        // el1.id = 'input-1';
-        // el1.content = 'Input 1';
-        // el1.placement = Place.BOTTOM;
-        // el1.title = 'titulo input-1';
+        const el1 = new Element();
+        el1.id = 'input-1';
+        el1.content = 'asdadads kh asdadads kh khdskh sdkahsd kjh flksdajfsldkafjsalkfdjaslkdfjasdadads kh khdskh sdkahsd kjh flksdajfsldkafjsalkfdjaslkdfjasdadads kh khdskh sdkahsd kjh flksdajfsldkafjsalkfdjaslkdfjasdadads kh khdskh sdkahsd kjh flksdajfsldkafjsalkfdjaslkdfjasdadads kh khdskh sdkahsd kjh flksdajfsldkafjsalkfdjaslkdfjkhdskh sdkahsd kjh flksdajfsldkafjsalkfdjaslkdfjsafasfjsaklrklwerjqklwrjlkqwerjlwkqerjqwklrjqkwlerjklwqejrlkwfsldkfhlksahfInputlksdInput 1';
+        el1.placement = Place.RIGHT;
+        el1.title = 'Titulo input-1';
+        el1.height = 100;
+        el1.width = 100;
 
-        // const el2 = new Element();
-        // el2.id = 'input-2';
-        // el2.content = 'Input 2';
-        // el2.placement = Place.BOTTOM;
-        // el2.title = 'titulo input-2';
+        const el2 = new Element();
+        el2.id = 'input-2';
+        el2.content = 'asdadads kh khdskh sdkahsd kjh flksdajfsldkafjsalkfdjaslkdfjsafasfjsaklrklwerjqklwrjlkqwerjlwkqerjqwklrjqkwlerjklwqejrlkwfsldkfhlksahfInputlksdInput 1';
+        el2.placement = Place.TOP;
+        el2.title = 'Titulo input-2';
+        el2.height = 150;
+        el2.width = 200;
 
-        // const el3 = new Element();
-        // el3.id = 'input-3';
-        // el3.content = 'Input 3';
-        // el3.placement = Place.BOTTOM;
-        // el3.title = 'titulo input-3';
+        const el3 = new Element();
+        el3.id = 'input-3';
+        el3.content = 'Input 3';
+        el3.placement = Place.LEFT;
+        el3.title = 'Titulo input-3';
+        el3.height = 20;
+        el3.width = 200;
 
-        // this.ids.push(el1, el2, el3);
+        const el4 = new Element();
+        el4.id = 'input-4';
+        el4.content = 'asdadads kh khdskh sdkahsd kjh flksdajfsldkafjsalkfdjaslkdfjsafasfjsaklrklwerjqklwrjlkqwerjlwkqerjqwklrjqkwlerjklwqejrlkwfsldkfhlksahfInputlksdInput 1';
+        el4.placement = Place.LEFT;
+        el4.title = 'Titulo input-4';
+        el4.height = 100;
+        el4.width = 200;
+
+        const el5 = new Element();
+        el5.id = 'texto';
+        el5.content = 'Inputlksdjflksdajfsldkafjsalkfdjaslkdfjsafasfjsaklrklwerjqklwrjlkqwerjlwkqerjqwklrjqkwlerjklwqejrlkwfsldkfhlksahf 4';
+        el5.placement = Place.BOTTOM;
+        el5.title = 'Titulo input-5';
+        el5.height = 50;
+        el5.width = 200;
+        this.ids.push(el1, el2, el3, el4, el5);
+
     }
 
     public logar(user: string, password: string) {

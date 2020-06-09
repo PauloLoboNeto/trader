@@ -3,6 +3,8 @@ export class Element {
     title: string;
     content: string;
     placement: string;
+    height: number;
+    width: number;
 }
 
 export class CoachMarkModel {
@@ -10,8 +12,10 @@ export class CoachMarkModel {
     title: string;
     content: string;
     placement: string;
-    zIndex: string;
-    display: string;
+    top: number;
+    left: number;
+    height: number;
+    width: number;
 }
 
 
