@@ -2,7 +2,7 @@ export class Element {
     id: string;
     title: string;
     content: string;
-    placement: string;
+    placement: Place;
     height: number;
     width: number;
 }

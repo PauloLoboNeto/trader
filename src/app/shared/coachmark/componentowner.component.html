@@ -1,20 +1,14 @@
-<div class="popover" id="popove" [ngStyle]="{ 
-              'height': getHeight(), 'width': getWidth(),
-              'left':  getLeft(), 'top': getTop(),
-            'min-width': '200px', 'min-height': '150px'}">
-    <div class="arrow"></div>
-    <div style="height: inherit; padding-top: 5px;">
-
-        <h3 class="col-12 popover-title" style="padding-left: 7px; padding-right: 9px;">{{actualElement.title}}</h3>
-
-        <div class="col-12 popover-content" style="padding-left: 7px; padding-right: 9px;">{{actualElement.content}}</div>
-
-        <div class="col-12" style="position: absolute; bottom: 0%; padding-left: 7px; padding-right: 9px; padding-bottom: 4px;">
-            <a style="float:right; cursor: pointer; text-decoration: underline;" *ngIf="showNext()" (click)="next()">Próximo</a>
-            <a style="float:right; cursor: pointer; text-decoration: underline;" *ngIf="position == elements.length - 1" (click)="finalizar()">Ok, entendi!</a>
-            <a style="float:left; cursor: pointer; text-decoration: underline; margin-right: 5px;" *ngIf="position != 0" (click)="prev()">Anterior</a>
-        </div>
-
+<div class="popover" id="popove" [ngStyle]="{ 'height': getHeight(), 'width': getWidth(),
+                 'left':  getLeft(), 'top': getTop(),
+                 'min-width': '200px', 'min-height': '150px',
+                'max-width': '300px', 'max-height': '200px'}">
+    <div class="arrow" [ngStyle]="{'left': getLeftArrow(), 'top': getTopArrow()}"></div>
+    <h3 class="popover-title">{{actualElement.title}}</h3>
+    <div class="popover-content" style="height: 70%;">{{actualElement.content}}</div>
+    <div class="col-12 popover-footer">
+        <a class="link right" *ngIf="showNext()" (click)="next()">Próximo</a>
+        <a class="link right" *ngIf="position == elements.length - 1" (click)="finalizar()">Ok, entendi!</a>
+        <a class="link left" style="margin-right: 5px;" *ngIf="position != 0" (click)="prev()">Anterior</a>
     </div>
 </div>
 

@@ -1,20 +1,14 @@
 import { CoachMarkModel, Element, Place } from './model/coachmark.model';
-import {
-    Component,
-    Renderer2, ElementRef,
-    Input, OnInit, NgZone, AfterViewChecked, ViewChild, OnChanges
-} from '@angular/core';
+import { Component, Renderer2, Input, OnInit, NgZone, OnChanges } from '@angular/core';
 
 @Component({
     selector: 'app-coachmark-component',
     templateUrl: './componentowner.component.html',
     styleUrls: ['./componentowner.component.css']
-
 })
 export class CoachMarkComponent implements OnInit, OnChanges {
 
     @Input() elements: Element[];
-
     position = 0;
     prevElement: CoachMarkModel = new CoachMarkModel();
     actualElement: CoachMarkModel = new CoachMarkModel();
@@ -32,7 +26,6 @@ export class CoachMarkComponent implements OnInit, OnChanges {
             });
         };
     }
-
 
     first() {
         this.actualElement = this.getElement(this.position);
@@ -78,41 +71,49 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         }
     }
 
-    private calcTop(id: HTMLElement, height: number, placement: string): number {
-        if (height < 150) {
-            height = 150;
+    private calcTop(id: HTMLElement, heightPopover: number, placement: string): number {
+        if (heightPopover < 150) {
+            heightPopover = 150;
+        } else if (heightPopover > 200) {
+            heightPopover = 200;
         }
-        const commonY = Math.round(id.getBoundingClientRect().bottom - id.getBoundingClientRect().height / 2 - height / 2 + window.scrollY);
+        const dimensionsActualElement = id.getBoundingClientRect();
+        const commonY = Math.round(dimensionsActualElement.bottom - dimensionsActualElement.height / 2
+            - heightPopover / 2 + window.scrollY);
+        const bottom = Math.round(dimensionsActualElement.bottom + window.scrollY);
+        const top = Math.round(dimensionsActualElement.top - heightPopover + window.scrollY);
+
         switch (placement) {
             case Place.BOTTOM:
-                return Math.round(id.getBoundingClientRect().bottom + window.scrollY);
+                return bottom;
             case Place.TOP:
-                return Math.round(id.getBoundingClientRect().top - height + window.scrollY);
+                return top;
             case Place.LEFT:
             case Place.RIGHT:
                 return commonY;
         }
     }
 
-    private calcLeft(id: HTMLElement, width: number, placement: string): number {
-        if (width < 200) {
-            width = 200;
+    private calcLeft(id: HTMLElement, widthPopover: number, placement: string): number {
+        if (widthPopover < 200) {
+            widthPopover = 200;
+        } else if (widthPopover > 300) {
+            widthPopover = 300;
         }
+        const dimensionsActualElement = id.getBoundingClientRect();
+        const commonX = Math.round((dimensionsActualElement.right - dimensionsActualElement.width / 2 - widthPopover / 2) + window.scrollX);
+        const left = Math.round(dimensionsActualElement.left - widthPopover + window.scrollX);
+        const right = Math.round(dimensionsActualElement.left + dimensionsActualElement.width + window.scrollX);
+
         switch (placement) {
             case Place.BOTTOM:
             case Place.TOP:
-                return Math.round((id.getBoundingClientRect().right - id.getBoundingClientRect().width / 2
-                    - width / 2) + window.scrollX);
+                return commonX;
             case Place.LEFT:
-                return Math.round(id.getBoundingClientRect().left - width);
+                return left;
             case Place.RIGHT:
-                return Math.round(id.getBoundingClientRect().left
-                    + id.getBoundingClientRect().width);
+                return right;
         }
-    }
-
-    getHeights(): string {
-        return (this.actualElement.height + window.scrollY) + 'px';
     }
 
     private applyClassPlacement(el: any, place: string) {
@@ -135,7 +136,39 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         return Math.round(this.actualElement.elementId.getBoundingClientRect().width) + 'px';
     }
 
+    getLeftArrow(): string {
+        const popove = document.getElementById('popove');
+        switch (this.actualElement.placement) {
+            case Place.BOTTOM:
+            case Place.TOP:
+                return '44%';
+            case Place.LEFT:
+                return Math.round(popove.getBoundingClientRect().width - 3) + 'px';
+            case Place.RIGHT:
+                return '-19px';
+        }
+    }
+
+    getTopArrow(): string {
+        const popove = document.getElementById('popove');
+        switch (this.actualElement.placement) {
+            case Place.BOTTOM:
+                return '-19' + 'px';
+            case Place.TOP:
+                return Math.round(popove.getBoundingClientRect().height + window.scrollY) -3 +'px';
+            case Place.LEFT:
+            case Place.RIGHT:
+                return '44%';
+        }
+    }
+
     getHeight(): string {
+        let heightPopover = this.actualElement.height;
+        if (heightPopover < 150) {
+            heightPopover = 150;
+        } else if (heightPopover > 200) {
+            heightPopover = 200;
+        }
         return this.actualElement.height + 'px';
     }
 
@@ -148,7 +181,13 @@ export class CoachMarkComponent implements OnInit, OnChanges {
     }
 
     getWidth(): string {
-        return this.actualElement.width + 'px';
+        let widthPopover = this.actualElement.width;
+        if (widthPopover < 200) {
+            widthPopover = 200;
+        } else if (widthPopover > 300) {
+            widthPopover = 300;
+        }
+        return widthPopover + 'px';
     }
 
     getHeightBackgroundStepActive(): string {
