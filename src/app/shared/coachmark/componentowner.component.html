@@ -1,11 +1,14 @@
 <div class="popover" id="popove" [ngStyle]="{ 'height': getHeight(), 'width': getWidth(),
                  'left':  getLeft(), 'top': getTop(),
-                 'min-width': '200px', 'min-height': '150px',
-                'max-width': '300px', 'max-height': '200px'}">
+                 'min-width': '190px', 'min-height': '120px',
+                'max-width': '390px', 'max-height': '200px'}">
     <div class="arrow" [ngStyle]="{'left': getLeftArrow(), 'top': getTopArrow()}"></div>
-    <h3 class="popover-title">{{actualElement.title}}</h3>
-    <div class="popover-content" style="height: 70%;">{{actualElement.content}}</div>
-    <div class="col-12 popover-footer">
+    <div class="popover-title" style="height: 15%;">
+        <span class="left">{{actualElement.title}}</span>
+        <span class="right">{{position + 1}}/{{elements.length}}</span>
+    </div>
+    <div class="popover-content col-12" style="height: 60%;  width: inherit;"><span style="text-align: left;">{{actualElement.content}}</span></div>
+    <div class="popover-footer col-12">
         <a class="link right" *ngIf="showNext()" (click)="next()">Próximo</a>
         <a class="link right" *ngIf="position == elements.length - 1" (click)="finalizar()">Ok, entendi!</a>
         <a class="link left" style="margin-right: 5px;" *ngIf="position != 0" (click)="prev()">Anterior</a>

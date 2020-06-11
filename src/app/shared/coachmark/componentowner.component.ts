@@ -30,6 +30,7 @@ export class CoachMarkComponent implements OnInit, OnChanges {
     first() {
         this.actualElement = this.getElement(this.position);
         this.applyStyleOnElementActive('first');
+        this.focus();
     }
 
     prev() {
@@ -37,6 +38,7 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         this.position += -1;
         this.actualElement = this.getElement(this.position);
         this.applyStyleOnElementActive();
+        this.focus();
     }
 
     next() {
@@ -44,6 +46,12 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         this.position += 1;
         this.actualElement = this.getElement(this.position);
         this.applyStyleOnElementActive();
+        this.focus();
+    }
+
+    focus() {
+        const popove = document.getElementById('popove');
+        window.parent.scrollTo(0, popove.getBoundingClientRect().top + window.scrollY);
     }
 
     private getElement(index: number): CoachMarkModel {
@@ -72,8 +80,8 @@ export class CoachMarkComponent implements OnInit, OnChanges {
     }
 
     private calcTop(id: HTMLElement, heightPopover: number, placement: string): number {
-        if (heightPopover < 150) {
-            heightPopover = 150;
+        if (heightPopover < 120) {
+            heightPopover = 120;
         } else if (heightPopover > 200) {
             heightPopover = 200;
         }
@@ -95,10 +103,10 @@ export class CoachMarkComponent implements OnInit, OnChanges {
     }
 
     private calcLeft(id: HTMLElement, widthPopover: number, placement: string): number {
-        if (widthPopover < 200) {
-            widthPopover = 200;
-        } else if (widthPopover > 300) {
-            widthPopover = 300;
+        if (widthPopover < 150) {
+            widthPopover = 150;
+        } else if (widthPopover > 390) {
+            widthPopover = 390;
         }
         const dimensionsActualElement = id.getBoundingClientRect();
         const commonX = Math.round((dimensionsActualElement.right - dimensionsActualElement.width / 2 - widthPopover / 2) + window.scrollX);
@@ -136,6 +144,10 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         return Math.round(this.actualElement.elementId.getBoundingClientRect().width) + 'px';
     }
 
+    getHeightBackgroundStepActive(): string {
+        return Math.round(this.actualElement.elementId.getBoundingClientRect().height) + 'px';
+    }
+
     getLeftArrow(): string {
         const popove = document.getElementById('popove');
         switch (this.actualElement.placement) {
@@ -155,7 +167,7 @@ export class CoachMarkComponent implements OnInit, OnChanges {
             case Place.BOTTOM:
                 return '-19' + 'px';
             case Place.TOP:
-                return Math.round(popove.getBoundingClientRect().height + window.scrollY) -3 +'px';
+                return Math.round(popove.getBoundingClientRect().height) - 3 + 'px';
             case Place.LEFT:
             case Place.RIGHT:
                 return '44%';
@@ -164,8 +176,8 @@ export class CoachMarkComponent implements OnInit, OnChanges {
 
     getHeight(): string {
         let heightPopover = this.actualElement.height;
-        if (heightPopover < 150) {
-            heightPopover = 150;
+        if (heightPopover < 120) {
+            heightPopover = 120;
         } else if (heightPopover > 200) {
             heightPopover = 200;
         }
@@ -182,17 +194,15 @@ export class CoachMarkComponent implements OnInit, OnChanges {
 
     getWidth(): string {
         let widthPopover = this.actualElement.width;
-        if (widthPopover < 200) {
-            widthPopover = 200;
-        } else if (widthPopover > 300) {
-            widthPopover = 300;
+        if (widthPopover < 190) {
+            widthPopover = 190;
+        } else if (widthPopover > 390) {
+            widthPopover = 390;
         }
         return widthPopover + 'px';
     }
 
-    getHeightBackgroundStepActive(): string {
-        return Math.round(this.actualElement.elementId.getBoundingClientRect().height) + 'px';
-    }
+
 
     showNext(): boolean {
         if (this.elements.length > 0 && this.position < this.elements.length - 1) {

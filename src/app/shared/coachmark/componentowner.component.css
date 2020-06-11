@@ -1,8 +1,8 @@
 .popover {
-    padding-right: 1px;
-    padding-left: 1px;
+    padding-right: 4px;
+    padding-left: 4px;
     padding-top: 4px;
-    padding-bottom: 1px;
+    padding-bottom: 4px;
     font-family: RobotoRegular0;
     line-height: 1.2;
     border: 1px solid #ccc;
@@ -21,9 +21,12 @@
     padding-right: 9px;
 }
 
+.popover-title span {
+    margin-bottom: 8px;
+}
+
 .popover-content {
     overflow-y: auto;
-    overflow-x: hidden;
     font-size: 12px;
     padding-left: 7px;
     padding-right: 9px;
@@ -88,8 +91,8 @@
     position: absolute;
     bottom: 0%;
     padding-left: 7px;
-    padding-right: 9px;
     padding-bottom: 4px;
+    font-size: 12px;
 }
 
 .popover-footer .link {
