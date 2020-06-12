@@ -25,3 +25,8 @@ export enum Place {
     LEFT = 'left',
     RIGHT = 'right'
 }
+
+export enum Dimension {
+    HEIGHT = 'height',
+    WIDTH = 'width'
+}

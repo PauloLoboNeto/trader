@@ -1,5 +1,5 @@
-<div class="popover" id="popove" [ngStyle]="{ 'height': getHeight(), 'width': getWidth(),
-                 'left':  getLeft(), 'top': getTop(),
+<div class="popover" id="popove" [ngStyle]="{ 'height': getHeightPopove(), 'width': getWidthPopove(),
+                 'left':  getLeftPopove(), 'top': getTopPopove(),
                  'min-width': '190px', 'min-height': '120px',
                 'max-width': '390px', 'max-height': '200px'}">
     <div class="arrow" [ngStyle]="{'left': getLeftArrow(), 'top': getTopArrow()}"></div>
@@ -9,7 +9,7 @@
     </div>
     <div class="popover-content col-12" style="height: 60%;  width: inherit;"><span style="text-align: left;">{{actualElement.content}}</span></div>
     <div class="popover-footer col-12">
-        <a class="link right" *ngIf="showNext()" (click)="next()">Próximo</a>
+        <a class="link right" *ngIf="showButtonNext()" (click)="next()">Próximo</a>
         <a class="link right" *ngIf="position == elements.length - 1" (click)="finalizar()">Ok, entendi!</a>
         <a class="link left" style="margin-right: 5px;" *ngIf="position != 0" (click)="prev()">Anterior</a>
     </div>

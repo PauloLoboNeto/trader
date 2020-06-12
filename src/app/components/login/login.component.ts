@@ -29,7 +29,11 @@ export class LoginComponent implements OnInit {
 
         const el1 = new Element();
         el1.id = 'input-1';
-        el1.content = 'Novas entradas de caracteres';
+        el1.content = 'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
+        'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
+        'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
+        'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
+        'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres';
         el1.placement = Place.TOP;
         el1.title = 'Elemento 1';
         el1.height = 120;
