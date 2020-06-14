@@ -5,7 +5,7 @@ import { CdkFixedSizeVirtualScroll } from '@angular/cdk/scrolling';
 @Component({
     selector: 'app-coachmark-component',
     templateUrl: './componentowner.component.html',
-    styleUrls: ['./componentowner.component.css'],
+    styleUrls: ['./componentowner.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 export class CoachMarkComponent implements OnInit, OnChanges {
@@ -31,7 +31,7 @@ export class CoachMarkComponent implements OnInit, OnChanges {
 
     first() {
         this.actualElement = this.getElement(this.position);
-        this.applyStyleOnElementActive(true);
+        this.applyClassOnElementActive(true);
         this.focus();
     }
 
@@ -39,7 +39,7 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         this.prevElement = this.getElement(this.position);
         this.position += -1;
         this.actualElement = this.getElement(this.position);
-        this.applyStyleOnElementActive(false);
+        this.applyClassOnElementActive(false);
         this.focus();
     }
 
@@ -47,7 +47,7 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         this.prevElement = this.getElement(this.position);
         this.position += 1;
         this.actualElement = this.getElement(this.position);
-        this.applyStyleOnElementActive(false);
+        this.applyClassOnElementActive(false);
         this.focus();
     }
 
@@ -144,13 +144,11 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         return element;
     }
 
-    private applyStyleOnElementActive(first: boolean) {
-        this.render.setStyle(this.actualElement.elementId, 'z-index', '1101');
-        this.render.setStyle(this.actualElement.elementId, 'position', 'relative');
+    private applyClassOnElementActive(first: boolean) {
+        this.render.addClass(this.actualElement.elementId, 'step-active');
 
         if (!first) {
-            this.render.removeStyle(this.prevElement.elementId, 'z-index');
-            this.render.removeStyle(this.prevElement.elementId, 'position');
+            this.render.removeClass(this.prevElement.elementId, 'step-active');
         }
     }
 
@@ -226,8 +224,6 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         this.render.addClass(el, place.toLowerCase());
     }
 
-
-
     // export function offset(el) {
     //     const elBCR = el.getBoundingClientRect();
     //     return {
@@ -238,35 +234,5 @@ export class CoachMarkComponent implements OnInit, OnChanges {
     //         viewportWidth: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
     //         viewportHeight: Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
     //     };
-    // }
-
-    // export function addClass(el, className) {
-    //     const classes = className.split(' ');
-    //     classes.filter(className => className.length).forEach(className => {
-    //         if (el.classList) {
-    //             el.classList.add(className);
-    //         } else {     
-    //             if (el.className.toString() === '[object SVGAnimatedString]') {
-    //                 el.className.baseVal += (el.className.baseVal.length ? ' ' : '') + className;
-    //             } else {
-    //                 el.className += (el.className.length ? ' ' : '') + className;
-    //             }
-    //         }
-    //     });
-    // }
-
-    // export function removeClass(el, className) {
-    //     const classes = className.split(' ');
-    //     classes.filter(className => className.length).forEach(className => {
-    //         if (el.classList) {
-    //             el.classList.remove(className);
-    //         } else {
-    //             if (el.className.toString() === '[object SVGAnimatedString]'){
-    //                 el.className.baseVal = el.className.baseVal.toString().replace(new RegExp('(^|\s)' + className.split(' ').join('|') + '(\s|$)', 'gi'), ' ');
-    //             } else {
-    //                 el.className = el.className.toString().replace(new RegExp('(^|\s)' + className.split(' ').join('|') + '(\s|$)', 'gi'), ' ');
-    //             }         
-    //         }
-    //     });
     // }
 }
