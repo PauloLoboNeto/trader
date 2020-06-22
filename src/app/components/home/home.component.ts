@@ -194,11 +194,11 @@ export class HomeComponent implements OnInit {
                 if (comparacao.length == 0) {
                     this.cardsAdicionado.push(retornoPesquisa[0]);
                 } else {
-                    this.alertService.alertSuccess(AlertType.INFO, '', 'Card Já Foi Adicionado');
+                    this.alertService.alert(AlertType.INFO, '', 'Card Já Foi Adicionado');
                 }
             } else {
                 this.definirBoxShadow('0px 0px 10px red');
-                this.alertService.alertSuccess(AlertType.ERROR, '', 'Card não encontrado');
+                this.alertService.alert(AlertType.ERROR, '', 'Card não encontrado');
             }
         });
     }

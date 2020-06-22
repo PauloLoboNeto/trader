@@ -1,6 +1,5 @@
 import { CoachMarkModel, Element, Place, Dimension } from './model/coachmark.model';
-import { Component, Renderer2, Input, OnInit, NgZone, OnChanges, ViewEncapsulation } from '@angular/core';
-import { CdkFixedSizeVirtualScroll } from '@angular/cdk/scrolling';
+import { Component, Renderer2, Input, OnInit, NgZone, OnChanges, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'app-coachmark-component',
@@ -11,6 +10,7 @@ import { CdkFixedSizeVirtualScroll } from '@angular/cdk/scrolling';
 export class CoachMarkComponent implements OnInit, OnChanges {
 
     @Input() elements: Element[];
+    @Output() concluir = new EventEmitter<boolean>();
     position = 0;
     prevElement: CoachMarkModel = new CoachMarkModel();
     actualElement: CoachMarkModel = new CoachMarkModel();
@@ -29,35 +29,14 @@ export class CoachMarkComponent implements OnInit, OnChanges {
         };
     }
 
-    first() {
-        this.actualElement = this.getElement(this.position);
-        this.applyClassOnElementActive(true);
-        this.focus();
-    }
+ 
 
-    prev() {
+    alterar(passo: number) {
         this.prevElement = this.getElement(this.position);
-        this.position += -1;
+        this.position += passo;
         this.actualElement = this.getElement(this.position);
         this.applyClassOnElementActive(false);
         this.focus();
-    }
-
-    next() {
-        this.prevElement = this.getElement(this.position);
-        this.position += 1;
-        this.actualElement = this.getElement(this.position);
-        this.applyClassOnElementActive(false);
-        this.focus();
-    }
-
-    focus() {
-        const math = Math.round(this.actualElement.elementId.getBoundingClientRect().top
-            + window.scrollY);
-        window.scroll({
-            top: math,
-            behavior: 'smooth'
-        });
     }
 
     getTopBackgroundStepActive(): string {
@@ -112,11 +91,21 @@ export class CoachMarkComponent implements OnInit, OnChanges {
     }
 
     getTopPopove(): string {
-        return `${this.actualElement.top}px`;
+        if (this.actualElement.placement != Place.CENTER) {
+            return `${this.actualElement.top}px`;
+        } else {
+            const size = (window.innerHeight - this.actualElement.height) / 2;
+            return `${size}px`;
+        }
     }
 
     getLeftPopove(): string {
-        return `${this.actualElement.left}px`;
+        if (this.actualElement.placement != Place.CENTER) {
+            return `${this.actualElement.left}px`;
+        } else {
+            const size = (window.innerWidth - this.actualElement.width) / 2;
+            return `${size}px`;
+        }
     }
 
     showButtonNext(): boolean {
@@ -126,7 +115,28 @@ export class CoachMarkComponent implements OnInit, OnChanges {
     }
 
     finalizar() {
-        console.log('finalizar');
+        this.render.removeClass(this.actualElement.elementId, 'step-active');
+        this.render.removeAttribute(this.actualElement.elementId, 'disabled');
+        this.concluir.emit(true);
+    }
+
+    showArrow(): boolean {
+        if (this.actualElement.placement != Place.CENTER) return true;
+    }
+
+    private first() {
+        this.actualElement = this.getElement(this.position);
+        this.applyClassOnElementActive(true);
+        this.focus();
+    }
+
+    private focus() {
+        const math = Math.round(this.actualElement.elementId.getBoundingClientRect().top
+            + window.scrollY);
+        window.scroll({
+            top: math,
+            behavior: 'smooth'
+        });
     }
 
     private getElement(index: number): CoachMarkModel {
@@ -146,9 +156,10 @@ export class CoachMarkComponent implements OnInit, OnChanges {
 
     private applyClassOnElementActive(first: boolean) {
         this.render.addClass(this.actualElement.elementId, 'step-active');
-
+        this.render.setProperty(this.actualElement.elementId, 'disabled', 'true');
         if (!first) {
             this.render.removeClass(this.prevElement.elementId, 'step-active');
+            this.render.removeAttribute(this.prevElement.elementId, 'disabled');
         }
     }
 

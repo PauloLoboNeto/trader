@@ -2,16 +2,16 @@
                  'left':  getLeftPopove(), 'top': getTopPopove(),
                  'min-width': '190px', 'min-height': '120px',
                 'max-width': '390px', 'max-height': '200px'}">
-    <div class="arrow" [ngStyle]="{'left': getLeftArrow(), 'top': getTopArrow()}"></div>
+    <div class="arrow" *ngIf="showArrow()" [ngStyle]="{'left': getLeftArrow(), 'top': getTopArrow()}"></div>
     <div class="title" style="height: 15%;">
         <span class="left">{{actualElement.title}}</span>
-        <span class="right">{{position + 1}}/{{elements.length}}</span>
+        <span *ngIf="elements.length > 1" class="right">{{position + 1}}/{{elements.length}}</span>
     </div>
     <div class="content col-12" style="height: 60%;  width: inherit;"><span style="text-align: left;">{{actualElement.content}}</span></div>
     <div class="footer col-12">
-        <a class="link right" *ngIf="showButtonNext()" (click)="next()">Próximo</a>
+        <a class="link right" *ngIf="showButtonNext()" (click)="alterar(1)">Próximo</a>
         <a class="link right" *ngIf="position == elements.length - 1" (click)="finalizar()">Ok, entendi!</a>
-        <a class="link left" style="margin-right: 5px;" *ngIf="position != 0" (click)="prev()">Anterior</a>
+        <a class="link left" style="margin-right: 5px;" *ngIf="position != 0" (click)="alterar(-1)">Anterior</a>
     </div>
 </div>
 

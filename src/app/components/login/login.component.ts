@@ -1,10 +1,13 @@
-import { CoachMarkModel, Element, Place } from './../../shared/coachmark/model/coachmark.model';
-import { CoachMarkComponent } from './../../shared/coachmark/componentowner.component';
+import { AlertService } from './../../shared/services/alert/alert.service';
+import { ModalComponent } from './../modal/modal.component';
+import { Login } from './../../models/login.model';
+import { LoginService } from './../../shared/services/login.service';
+import { Element, Place } from './../../shared/coachmark/model/coachmark.model';
 import { FormularioLoginModel } from '../../models/login/formularioLogin.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Component, OnInit, ViewChildren, AfterViewChecked, QueryList, ViewChild, ChangeDetectorRef, Injector } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { CMDirective } from 'src/app/shared/coachmark/directive/cmDirective.directive';
+import { AlertType } from 'src/app/shared/services/alert/alert.enum';
 
 @Component({
     selector: 'app-login-component',
@@ -17,9 +20,12 @@ export class LoginComponent implements OnInit {
     user = 'admin';
     password = 'admin';
     ids: Element[] = new Array<Element>();
-
-    constructor(private formBuilder: FormBuilder,
-        private readonly router: Router
+    exibir = true;
+    constructor(
+        private formBuilder: FormBuilder,
+        private readonly router: Router,
+        private loginService: LoginService,
+        private alertService: AlertService
     ) { }
 
     ngOnInit() {
@@ -30,11 +36,11 @@ export class LoginComponent implements OnInit {
         const el1 = new Element();
         el1.id = 'input-1';
         el1.content = 'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
-        'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
-        'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
-        'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
-        'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres';
-        el1.placement = Place.TOP;
+            'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
+            'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
+            'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres' +
+            'Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres;Novas entradas de caracteres';
+        el1.placement = Place.CENTER;
         el1.title = 'Elemento 1';
         el1.height = 120;
         el1.width = 190;
@@ -63,20 +69,34 @@ export class LoginComponent implements OnInit {
         el4.height = 190;
         el4.width = 260;
 
-        const el5 = new Element();
-        el5.id = 'texto';
-        el5.content = 'adrfwerwlekrjlwkj';
-        el5.placement = Place.BOTTOM;
-        el5.title = 'Titulo input-5';
-        el5.height = 50;
-        el5.width = 200;
-        this.ids.push(el1, el2, el3, el4, el5);
+        this.ids.push(el1, el2, el3, el4);
 
     }
 
-    public logar(user: string, password: string) {
+    public logarSemAutenticacao(user: string, password: string) {
         if (user == this.user && password == this.password) {
             this.router.navigate(['/home-component']);
         }
+    }
+
+    public logarComAutenticacao(user: string, password: string) {
+        const loginRequest = new Login();
+        loginRequest.username = user;
+        loginRequest.password = password;
+
+        this.loginService.login(loginRequest).subscribe(res => {
+            this.router.navigate(['/home-component']);
+        }, (error) => {
+            if (error.status == 403) {
+                this.alertService.alert(AlertType.ERROR, 'Acesso não Permitido');
+            } else {
+                this.alertService.alert(AlertType.ERROR, 'Acesso não Permitido. Contate seu gerente');
+            }
+            console.log(error);
+        });
+    }
+
+    concluir(){
+        this.exibir = false;
     }
 }

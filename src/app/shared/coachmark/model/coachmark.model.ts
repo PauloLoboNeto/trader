@@ -23,7 +23,8 @@ export enum Place {
     TOP = 'top',
     BOTTOM = 'bottom',
     LEFT = 'left',
-    RIGHT = 'right'
+    RIGHT = 'right',
+    CENTER = 'center'
 }
 
 export enum Dimension {

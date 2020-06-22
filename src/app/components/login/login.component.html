@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col-3"></div>
                         <div class="col-6" style="padding-top: 10px;">
-                            <button type="submit" id="input-3" class="btn" (click)="logar(groupLogin.get('usuario').value, groupLogin.get('senha').value)">Entrar</button>
+                            <button type="submit" id="input-3" class="btn" (click)="logarComAutenticacao(groupLogin.get('usuario').value, groupLogin.get('senha').value)">Entrar</button>
                         </div>
                     </div>
                 </div>
@@ -28,5 +28,4 @@
     </div>
 </form>
 
-<a-root></a-root>
-<app-coachmark-component [elements]="ids"></app-coachmark-component>
+<app-coachmark-component *ngIf="exibir" [elements]="ids" (concluir)="concluir()"></app-coachmark-component>
